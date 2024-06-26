@@ -3,34 +3,46 @@ extends ../../layouts/default.pug
 block main 
     h1 Danh sách sản phẩm
 
-    table.table.table-hover.table-sm
-        thead
-            tr
-                th STT
-                th Hình ảnh
-                th Tiêu đề
-                th Giá
-                th Trạng thái
-                th Hành động
-        tbody
-            each item, index in products
-                tr
-                    td #{index + 1}
-                    td
-                        img(
-                            src=item.thumbnail
-                            alt=item.title
-                            width="100px"
-                            height="100px"
-                            object-fit="contain"
-                        )
-                    td #{item.title}
-                    td #{item.price}$
-                    td  
-                        if (item.status === "active")
-                            a.badge.text-bg-success.text-decoration-none(href="#!") Hoạt động
-                        else
-                            a.badge.text-bg-danger.text-decoration-none(href="#!") Dừng hoạt động
-                    td
-                        button.btn.btn-warning.btn-sm Sửa
-                        button.btn.btn-danger.btn-sm.ms-2 Xóa
+    .card.mb-3
+        .card-header Bộ lọc và tìm kiếm 
+        .card-body 
+            each item in filterStatus
+                button.btn.btn-sm.ms-1.btn-outline-success(
+                    class= `${item.class}`
+                    button-status=item.status
+                ) #{item.name}
+
+    .card.mb-3
+        .card-header Danh sách
+        .card-body 
+            table.table.table-hover.table-sm
+                thead
+                    tr
+                        th STT
+                        th Hình ảnh
+                        th Tiêu đề
+                        th Giá
+                        th Trạng thái
+                        th Hành động
+                tbody
+                    each item, index in products
+                        tr
+                            td #{index + 1}
+                            td
+                                img(
+                                    src=item.thumbnail
+                                    alt=item.title
+                                    width="100px"
+                                    height="100px"
+                                    object-fit="contain"
+                                )
+                            td #{item.title}
+                            td #{item.price}$
+                            td  
+                                if (item.status === "active")
+                                    a.badge.text-bg-success.text-decoration-none(href="#!") Hoạt động
+                                else
+                                    a.badge.text-bg-danger.text-decoration-none(href="#!") Dừng hoạt động
+                            td
+                                button.btn.btn-warning.btn-sm Sửa
+                                button.btn.btn-danger.btn-sm.ms-2 Xóa
