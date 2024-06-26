@@ -1,0 +1,12 @@
+mixin search(keyword)
+    form#form-search
+        .input-group
+            input.form-control(
+                type="text"
+                placeholder="Nhập từ khóa"
+                name="keyword"
+                value=keyword
+            )
+            button.btn.btn-outline-secondary(
+                type="submit"
+            ) Tìm

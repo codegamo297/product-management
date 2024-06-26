@@ -1,4 +1,6 @@
 extends ../../layouts/default.pug
+include ../../mixins/filterStatus.pug
+include ../../mixins/search.pug
 
 block main 
     h1 Danh sách sản phẩm
@@ -7,23 +9,9 @@ block main
         .card-header Bộ lọc và tìm kiếm 
         .card-body.row
             .col-6
-                each item in filterStatus
-                    button.btn.btn-sm.ms-1.btn-outline-success(
-                        class= `${item.class}`
-                        button-status=item.status
-                    ) #{item.name}
+                +filter-status(filterStatus)
             .col-6 
-                form#form-search
-                    .input-group
-                        input.form-control(
-                            type="text"
-                            placeholder="Nhập từ khóa"
-                            name="keyword"
-                            value=keyword
-                        )
-                        button.btn.btn-outline-secondary(
-                            type="submit"
-                        ) Tìm
+                +search(keyword)
     .card.mb-3
         .card-header Danh sách
         .card-body 
