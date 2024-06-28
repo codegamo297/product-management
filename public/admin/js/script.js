@@ -1,10 +1,10 @@
 // Button status
-const btnStatus = document.querySelectorAll("[button-status]");
+const btnStatuses = document.querySelectorAll("[button-status]");
 
-if (btnStatus.length > 0) {
+if (btnStatuses.length > 0) {
     let url = new URL(window.location.href);
 
-    btnStatus.forEach((btn) => {
+    btnStatuses.forEach((btn) => {
         btn.addEventListener("click", () => {
             const status = btn.getAttribute("button-status");
 
@@ -37,3 +37,18 @@ if (formSearch) {
     });
 }
 // End Form search
+
+// Btn pagination
+const btnPaginates = document.querySelectorAll("[button-pagination]");
+
+if (btnPaginates.length > 0) {
+    let url = new URL(window.location.href);
+
+    btnPaginates.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            url.searchParams.set("page", btn.getAttribute("button-pagination"));
+            window.location.href = url.href;
+        });
+    });
+}
+// End Btn pagination
