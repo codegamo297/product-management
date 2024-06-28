@@ -1,6 +1,7 @@
 const Product = require("../../models/product.model");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
+const paginationHelper = require("../../helpers/pagination");
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
@@ -9,19 +10,36 @@ module.exports.index = async (req, res) => {
     const find = {
         deleted: false,
     };
+
     if (req.query.status) find.status = req.query.status;
 
     // Tìm kiếm sản phẩm
     const objSearch = searchHelper(req.query);
+
     if (objSearch.regexKeyword) find.title = objSearch.regexKeyword;
 
+    // Phân trang
+    const countProducts = await Product.countDocuments(find);
+
+    const objPagination = paginationHelper(
+        {
+            currentPage: 1,
+            limitItem: 4,
+        },
+        req.query,
+        countProducts
+    );
+
     // Truy cập db
-    const products = await Product.find(find);
+    const products = await Product.find(find)
+        .limit(objPagination.limitItem)
+        .skip(objPagination.skip);
 
     res.render("admin/pages/products/index", {
         pageTitle: "Danh sách sản phẩm",
         products: products,
         filterStatus: filterStatus,
         keyword: objSearch.keyword,
+        pagination: objPagination,
     });
 };
