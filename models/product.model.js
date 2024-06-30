@@ -42,6 +42,7 @@ const productSchema = new Schema({
     thumbnail: String,
     status: String,
     deleted: Boolean,
+    deletedAt: Date,
 });
 
 productSchema.pre("updateOne", function (next) {

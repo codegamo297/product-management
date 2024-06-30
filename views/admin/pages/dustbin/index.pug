@@ -1,23 +1,12 @@
 extends ../../layouts/default.pug
-include ../../mixins/filterStatus.pug
-include ../../mixins/search.pug
 include ../../mixins/pagination.pug
-include ../../mixins/form-change-multi.pug
 
 block main 
-    h1 Danh sách sản phẩm
+    h1 Thùng rác
 
-    .card.mb-3
-        .card-header Bộ lọc và tìm kiếm 
-        .card-body.row
-            .col-6
-                +filter-status(filterStatus)
-            .col-6 
-                +search(keyword)
     .card.mb-3
         .card-header Danh sách
         .card-body
-            +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
             
             table.table.table-hover.table-sm(
                 checkbox-multi
@@ -65,24 +54,18 @@ block main
                                         button-change-status
                                     ) Dừng hoạt động
                             td
-                                button.btn.btn-warning.btn-sm Sửa
+                                button.btn.btn-warning.btn-sm Khôi phục
                                 button.btn.btn-danger.btn-sm.ms-2(
                                     btn-delete
                                     data-id=item.id
-                                ) Xóa
+                                ) Xóa vĩnh viễn
     
-    +pagination(pagination) 
-
-    form#form-change-status(
-        action="",
-        method="POST"
-        data-path=`${prefixAdmin}/products/change-status`
-    ) 
+    +pagination(pagination)
 
     form#form-delete-item(
         action="",
         method="POST"
-        data-path=`${prefixAdmin}/products/delete`
-    ) 
+        data-path=`${prefixAdmin}/dustbin/delete`
+    )
 
-    script(src="/admin/js/products.js")
+    script(src="/admin/js/dustbin.js")
