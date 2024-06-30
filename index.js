@@ -1,6 +1,5 @@
 const express = require("express");
 const methodOverride = require("method-override");
-const mongoose = require("mongoose");
 require("dotenv").config();
 
 const routeClient = require("./routes/client/index.route");
@@ -19,6 +18,10 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // Connect DB
 database.connect();
+
+// Body parse the data
+app.use(express.json()); //request json
+app.use(express.urlencoded({ extended: true })); // request URL-encoded
 
 // Set up
 app.set("views", "./views");
