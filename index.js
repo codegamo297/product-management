@@ -1,4 +1,5 @@
 const express = require("express");
+const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
@@ -9,6 +10,9 @@ const systemConfig = require("./config/system");
 
 const app = express();
 const port = process.env.PORT;
+
+// override with POST
+app.use(methodOverride("_method"));
 
 // App locals variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;

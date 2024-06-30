@@ -44,12 +44,15 @@ const productSchema = new Schema({
     deleted: Boolean,
 });
 
-productSchema.pre("save", function (next) {
-    const now = Date.now();
-    this.meta.updatedAt = now;
-    if (!this.meta.createdAt) {
-        this.meta.createdAt = now;
+productSchema.pre("updateOne", function (next) {
+    const update = this.getUpdate();
+
+    if (!update.$set) {
+        update.$set = {};
     }
+
+    update.$set["meta.updatedAt"] = new Date();
+
     next();
 });
 
