@@ -46,10 +46,10 @@ module.exports.index = async (req, res) => {
 
 // [PATCH] /admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
-    const status = req.params.status;
-    const id = req.params.id;
-
-    await Product.updateOne({ _id: id }, { status: status });
+    await Product.updateOne(
+        { _id: req.params.id },
+        { status: req.params.status }
+    );
 
     res.redirect("back");
 };
@@ -75,6 +75,16 @@ module.exports.changeMulti = async (req, res) => {
         default:
             res.json({ message: "Action is invalid" });
     }
+
+    res.redirect("back");
+};
+
+// [DELETE] /admin/products/delete/:id
+module.exports.delete = async (req, res) => {
+    await Product.updateOne(
+        { _id: req.params.id },
+        { deleted: true, deletedAt: new Date() }
+    );
 
     res.redirect("back");
 };
