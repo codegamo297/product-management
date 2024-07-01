@@ -34,6 +34,7 @@ module.exports.index = async (req, res) => {
 // [DELETE] /admin/dustbin/delete/:id
 module.exports.delete = async (req, res) => {
     await Product.deleteOne({ _id: req.params.id });
+    req.flash("success", `Đã xóa vĩnh viễn sản phẩm`);
 
     res.redirect("back");
 };
@@ -41,6 +42,7 @@ module.exports.delete = async (req, res) => {
 // [PATCH] /admin/dustbin/restore/:id
 module.exports.restore = async (req, res) => {
     await Product.updateOne({ _id: req.params.id }, { deleted: false });
+    req.flash("success", `Khôi phục thành công sản phẩm`);
 
     res.redirect("back");
 };

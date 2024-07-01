@@ -1,7 +1,10 @@
 extends ../../layouts/default.pug
 include ../../mixins/pagination.pug
+include ../../mixins/alert.pug
 
-block main 
+block main
+    +alert-success(2000)
+    
     h1 Thùng rác
 
     .card.mb-3
