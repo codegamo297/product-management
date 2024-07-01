@@ -54,7 +54,10 @@ block main
                                         button-change-status
                                     ) Dừng hoạt động
                             td
-                                button.btn.btn-warning.btn-sm Khôi phục
+                                button.btn.btn-warning.btn-sm(
+                                    btn-restore 
+                                    data-id=item.id
+                                ) Khôi phục
                                 button.btn.btn-danger.btn-sm.ms-2(
                                     btn-delete
                                     data-id=item.id
@@ -66,6 +69,12 @@ block main
         action="",
         method="POST"
         data-path=`${prefixAdmin}/dustbin/delete`
+    )
+
+    form#form-restore-item(
+        action="",
+        method="POST"
+        data-path=`${prefixAdmin}/dustbin/restore`
     )
 
     script(src="/admin/js/dustbin.js")

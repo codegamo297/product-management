@@ -37,3 +37,10 @@ module.exports.delete = async (req, res) => {
 
     res.redirect("back");
 };
+
+// [PATCH] /admin/dustbin/restore/:id
+module.exports.restore = async (req, res) => {
+    await Product.updateOne({ _id: req.params.id }, { deleted: false });
+
+    res.redirect("back");
+};
