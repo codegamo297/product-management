@@ -32,6 +32,7 @@ module.exports.index = async (req, res) => {
 
     // Truy cập db
     const products = await Product.find(find)
+        .sort({ position: "desc" })
         .limit(objPagination.limitItem)
         .skip(objPagination.skip);
 
@@ -71,6 +72,24 @@ module.exports.changeMulti = async (req, res) => {
                 { _id: { $in: ids } },
                 { status: "inactive" }
             );
+            break;
+        case "delete-all":
+            await Product.updateMany(
+                { _id: { $in: ids } },
+                { deleted: true, deletedAt: new Date() }
+            );
+            break;
+        case "change-position":
+            for (let item of ids) {
+                let [id, position] = item.split("-");
+
+                position = parseInt(position);
+                await Product.updateOne(
+                    { _id: id },
+                    { position: position, updatedAt: new Date() }
+                );
+            }
+
             break;
         default:
             res.json({ message: "Action is invalid" });
