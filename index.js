@@ -1,5 +1,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
+const flash = require("express-flash");
+const session = require("express-session");
 require("dotenv").config();
 
 const routeClient = require("./routes/client/index.route");
@@ -27,6 +29,17 @@ app.use(express.urlencoded({ extended: true })); // request URL-encoded
 app.set("views", "./views");
 app.set("view engine", "pug");
 app.use(express.static("public"));
+
+// Tooltip message (notification)
+app.use(
+    session({
+        secret: process.env.SECRET_TOOLTIP,
+        resave: false,
+        saveUninitialized: true,
+        cookie: { maxAge: 60000 },
+    })
+);
+app.use(flash());
 
 // Routes init
 routeAdmin(app);

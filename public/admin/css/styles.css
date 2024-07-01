@@ -46,3 +46,35 @@
     border-bottom: 1px solid #515151;
     text-decoration: none;
 }
+
+/* Show alert */
+p[show-alert] {
+    position: fixed;
+    top: 60px;
+    right: 15px;
+    z-index: 9999;
+}
+
+p[show-alert].alert-hidden {
+    animation: alert-hidden both 0.5s;
+}
+
+@keyframes alert-hidden {
+    from {
+        right: 15px;
+    }
+    to {
+        right: -100%;
+        display: none;
+    }
+}
+
+p[show-alert] span[close-alert] {
+    background: #ffffffc4;
+    padding: 0px 8px 4px 8px;
+    line-height: 24px;
+    font-weight: 600;
+    border-radius: 50%;
+    cursor: pointer;
+}
+/* EndShow alert */
