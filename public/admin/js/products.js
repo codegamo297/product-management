@@ -57,41 +57,6 @@ if (checkboxMulti) {
 }
 // End Checkbox multi
 
-// Form change multi
-const formChangeMulti = document.querySelector("[form-change-multi]");
-
-if (formChangeMulti) {
-    const btnSubmit = formChangeMulti.querySelector("button[type='submit']");
-
-    formChangeMulti.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const checkboxMulti = document.querySelector("[checkbox-multi]");
-        const inputsChecked = checkboxMulti.querySelectorAll(
-            "input[name='id']:checked"
-        );
-        const inputIds = formChangeMulti.querySelector("input[name='ids']");
-
-        if (inputsChecked.length > 0) {
-            // btnSubmit.removeAttribute("disabled");
-
-            let ids = [];
-
-            inputsChecked.forEach((input) => {
-                const id = input.value;
-                ids.push(id);
-            });
-            inputIds.value = ids.join(",");
-
-            formChangeMulti.submit();
-        } else {
-            // btnSubmit.setAttribute("disabled", "disabled");
-            alert("Cần chọn ít nhất một bản ghi");
-        }
-    });
-}
-// End Form change multi
-
 // Delete product
 const btnDeletes = document.querySelectorAll("[btn-delete]");
 

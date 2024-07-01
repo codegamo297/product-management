@@ -52,3 +52,51 @@ if (btnPaginates.length > 0) {
     });
 }
 // End Btn pagination
+
+// Form change multi
+const formChangeMulti = document.querySelector("[form-change-multi]");
+
+if (formChangeMulti) {
+    formChangeMulti.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const checkboxMulti = document.querySelector("[checkbox-multi]");
+        const inputsChecked = checkboxMulti.querySelectorAll(
+            "input[name='id']:checked"
+        );
+        const inputIds = formChangeMulti.querySelector("input[name='ids']");
+        const typeChange = e.target.elements.type.value;
+
+        if (typeChange === "delete-all") {
+            const isConfirm = confirm(
+                "Bạn có chắc muốn xóa những sản phẩm này không?"
+            );
+
+            if (!isConfirm) return;
+        }
+
+        if (inputsChecked.length > 0) {
+            let ids = [];
+
+            inputsChecked.forEach((input) => {
+                const id = input.value;
+
+                if (typeChange === "change-position") {
+                    const position = input
+                        .closest("tr")
+                        .querySelector("input[name='position']").value;
+
+                    ids.push(`${id}-${position}`);
+                } else {
+                    ids.push(id);
+                }
+            });
+            inputIds.value = ids.join(",");
+
+            formChangeMulti.submit();
+        } else {
+            alert("Cần chọn ít nhất một bản ghi");
+        }
+    });
+}
+// End Form change multi

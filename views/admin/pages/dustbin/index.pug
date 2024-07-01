@@ -6,8 +6,7 @@ block main
 
     .card.mb-3
         .card-header Danh sách
-        .card-body
-            
+        .card-body            
             table.table.table-hover.table-sm(
                 checkbox-multi
             )
@@ -20,6 +19,7 @@ block main
                         th Hình ảnh
                         th Tiêu đề
                         th Giá
+                        th Vị trí
                         th Trạng thái
                         th Hành động
                 tbody
@@ -38,6 +38,7 @@ block main
                                 )
                             td #{item.title}
                             td #{item.price}$
+                            td #{item.position}
                             td  
                                 if (item.status === "active")
                                     a.badge.text-bg-success.text-decoration-none(
