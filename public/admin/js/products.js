@@ -60,7 +60,7 @@ if (checkboxMulti) {
 // Delete product
 const btnDeletes = document.querySelectorAll("[btn-delete]");
 
-if (btnDeletes) {
+if (btnDeletes.length > 0) {
     const formDeleteItem = document.querySelector("#form-delete-item");
     const path = formDeleteItem.getAttribute("data-path");
 
