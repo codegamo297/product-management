@@ -1,0 +1,81 @@
+extends ../../layouts/default.pug
+
+block main
+    h1.mb-4 Trang tạo mới sản phẩm
+
+    form#form-create-product(
+        action=`${prefixAdmin}/products/store`
+        method="POST"
+    )
+        .mb-3 
+            label.form-label(for="title") Tiêu đề
+            input.form-control#title(
+                type="text"
+                name="title"
+                required
+            )
+        .mb-3 
+            label.form-label(for="desc") Mô tả
+            textarea.form-control#desc(
+                type="text"
+                name="description"
+                rows="5"
+            )
+        .mb-3 
+            label.form-label(for="price") Giá
+            input.form-control#price(
+                type="number"
+                name="price"
+                value="0"
+                min="0"
+            )
+        .mb-3 
+            label.form-label(for="discount") % Giảm giá
+            input.form-control#discount(
+                type="number"
+                name="discountPercentage"
+                value="0"
+                min="0"
+            )
+        .mb-3 
+            label.form-label(for="stock") Số lượng
+            input.form-control#stock(
+                type="number"
+                name="stock"
+                value="0"
+                min="0"
+            )
+        .mb-3 
+            label.form-label(for="thumbnail") Ảnh
+            input.form-control#thumbnail(
+                type="text"
+                name="thumbnail"
+            )
+        .mb-3 
+            label.form-label(for="position") Vị trí
+            input.form-control#position(
+                type="number"
+                name="position"
+                placeholder="Tự động tăng"
+                min="1"
+            )
+        .mb-3.form-check.form-check-inline
+            input.form-check-input#status-active(
+                type="radio"
+                name="status"
+                value="active"
+                checked
+            )
+            label.form-check-label(for="status-active") Hoạt động
+        .mb-3.form-check.form-check-inline
+            input.form-check-input#status-inactive(
+                type="radio"
+                name="status"
+                value="inactive"
+            )
+            label.form-check-label(for="status-inactive") Dừng hoạt động
+        .mb-3 
+            button.btn.btn-primary(type="submit") Tạo mới
+        
+
+    script(src="/admin/js/products.js")

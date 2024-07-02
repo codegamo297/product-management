@@ -5,14 +5,14 @@ mixin form-change-multi(path)
         form-change-multi
     )
         .d-flex.align-items-start 
-            .form-group 
+            .mb-3 
                 select.form-select(name="type")
                     option(disabled selected) Chọn hành động
                     option(value="active") Hoạt động
                     option(value="inactive") Dừng hoạt động
                     option(value="delete-all") Xóa tất cả
                     option(value="change-position") Thay đổi vị trí
-            .form-group
+            .mb-3
                 input.form-control.d-none(
                     type="text"
                     name="ids"
