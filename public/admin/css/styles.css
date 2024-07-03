@@ -77,4 +77,33 @@ p[show-alert] span[close-alert] {
     border-radius: 50%;
     cursor: pointer;
 }
-/* EndShow alert */
+/* End Show alert */
+
+/* Upload preview image */
+.wrap-preview {
+    display: inline-block;
+    position: relative;
+    margin-top: 20px;
+}
+
+.wrap-preview .image-preview {
+    width: 150px;
+    height: auto;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.wrap-preview .close-image {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    padding: 0px 10px 4px 10px;
+    background: #fff;
+    border-radius: 50%;
+    color: #65676b;
+    border: 1px solid #65676b;
+    cursor: pointer;
+}
+/* End Upload preview image */
