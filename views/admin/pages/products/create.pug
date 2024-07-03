@@ -5,6 +5,7 @@ block main
 
     form#form-create-product(
         action=`${prefixAdmin}/products/store`
+        enctype="multipart/form-data"
         method="POST"
     )
         .mb-3 
@@ -45,12 +46,20 @@ block main
                 value="0"
                 min="0"
             )
-        .mb-3 
+        .mb-3(upload-image)
             label.form-label(for="thumbnail") Ảnh
             input.form-control#thumbnail(
-                type="text"
+                type="file"
                 name="thumbnail"
+                accept="image/*"
+                upload-image-input
             )
+            .wrap-preview.d-none
+                img.image-preview(
+                    src=""
+                    upload-image-preview
+                )
+                span.close-image x
         .mb-3 
             label.form-label(for="position") Vị trí
             input.form-control#position(
