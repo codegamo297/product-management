@@ -4,11 +4,13 @@ include ../../mixins/alert.pug
 block main
     +alert-error-title(3000)
     +alert-error-title(3000)
+    +alert-success-update(3000)
+    +alert-error-update(3000)
+    
+    h1.mb-4 Trang chỉnh sửa sản phẩm
 
-    h1.mb-4 Trang tạo mới sản phẩm
-
-    form#form-create-product.needs-validation(
-        action=`${prefixAdmin}/products/store`
+    form#form-edit-product.needs-validation(
+        action=`${prefixAdmin}/products/edit/${product._id}?_method=PATCH`
         enctype="multipart/form-data"
         method="POST"
         novalidate
@@ -18,6 +20,7 @@ block main
             input.form-control#title(
                 type="text"
                 name="title"
+                value=product.title
                 required
             )
             .valid-feedback Looks good!
@@ -28,8 +31,9 @@ block main
                 type="text"
                 name="description"
                 rows="5"
+                value=product.description
                 required
-            )
+            ) #{product.description}
             .valid-feedback Looks good!
             .invalid-feedback Please provide a description.
         .mb-3 
@@ -38,6 +42,7 @@ block main
                 type="number"
                 name="price"
                 min="0"
+                value=product.price
                 required
             )
             .valid-feedback Looks good!
@@ -47,7 +52,7 @@ block main
             input.form-control#discount(
                 type="number"
                 name="discountPercentage"
-                value="0"
+                value=product.discountPercentage
                 min="0"
                 required
             )
@@ -57,6 +62,7 @@ block main
                 type="number"
                 name="stock"
                 min="0"
+                value=product.stock
                 required
             )
             .valid-feedback Looks good!
@@ -70,9 +76,9 @@ block main
                 upload-image-input
                 required
             )
-            .wrap-preview.d-none
+            .wrap-preview
                 img.image-preview(
-                    src=""
+                    src=product.thumbnail
                     upload-image-preview
                 )
                 span.close-image x
@@ -85,13 +91,14 @@ block main
                 name="position"
                 placeholder="Tự động tăng"
                 min="1"
+                value=product.position
             )
         .mb-3.form-check.form-check-inline
             input.form-check-input#status-active(
                 type="radio"
                 name="status"
                 value="active"
-                checked
+                checked=(product.status === "active" ? true : false)
             )
             label.form-check-label(for="status-active") Hoạt động
         .mb-3.form-check.form-check-inline
@@ -99,10 +106,12 @@ block main
                 type="radio"
                 name="status"
                 value="inactive"
+                checked=(product.status === "inactive" ? true : false)
             )
             label.form-check-label(for="status-inactive") Dừng hoạt động
-        .mb-3 
-            button.btn.btn-primary(type="submit") Tạo mới
+        .mb-3
+            button.btn.btn-primary(type="submit") Cập nhật
+            a.btn.btn-secondary.ms-3(href="/admin/products") Hủy
         
 
     script(src="/admin/js/products.js")

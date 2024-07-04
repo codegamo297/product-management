@@ -123,7 +123,9 @@ if (showAlert) {
 const uploadImage = document.querySelector("[upload-image]");
 
 if (uploadImage) {
-    const uploadInputImage = uploadImage.querySelector("[upload-image-input]");
+    const uploadInputImage = uploadImage.querySelector(
+        "input[upload-image-input]"
+    );
     const wrapPreview = uploadImage.querySelector(".wrap-preview");
     const uploadImagePreview = uploadImage.querySelector(
         "[upload-image-preview]"
@@ -137,14 +139,32 @@ if (uploadImage) {
             uploadImagePreview.src = URL.createObjectURL(file);
             wrapPreview.classList.remove("d-none");
         }
-
-        btnCloseImage.addEventListener("click", () => {
-            uploadImagePreview.src = "";
-            wrapPreview.classList.add("d-none");
-            e.target.value = "";
-        });
     });
+
+    btnCloseImage.addEventListener("click", () => {
+        uploadImagePreview.src = "";
+        wrapPreview.classList.add("d-none");
+        uploadInputImage.value = "";
+        uploadInputImage.setAttribute("required", "required");
+    });
+
+    if (uploadImagePreview.getAttribute("src")) {
+        uploadInputImage.removeAttribute("required");
+    }
 }
 // End Upload preview image
 
 // Validate
+const formNeedValidation = document.querySelector(".needs-validation");
+
+if (formNeedValidation) {
+    formNeedValidation.addEventListener("submit", (e) => {
+        if (!formNeedValidation.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        formNeedValidation.classList.add("was-validated");
+    });
+}
+// End Validate
