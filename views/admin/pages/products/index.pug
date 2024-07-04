@@ -84,7 +84,10 @@ block main
                                         button-change-status
                                     ) Dừng hoạt động
                             td
-                                a.btn.btn-warning.btn-sm(
+                                a.btn.btn-info.btn-sm(
+                                    href=`${prefixAdmin}/products/detail/${item.id}`
+                                ) Chi tiết
+                                a.btn.btn-warning.btn-sm.ms-2(
                                     href=`${prefixAdmin}/products/edit/${item.id}`
                                 ) Sửa
                                 button.btn.btn-danger.btn-sm.ms-2(
