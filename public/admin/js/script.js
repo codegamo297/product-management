@@ -146,3 +146,5 @@ if (uploadImage) {
     });
 }
 // End Upload preview image
+
+// Validate

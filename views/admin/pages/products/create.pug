@@ -1,6 +1,9 @@
 extends ../../layouts/default.pug
+include ../../mixins/alert.pug
 
 block main
+    +alert-error(3000)
+
     h1.mb-4 Trang tạo mới sản phẩm
 
     form#form-create-product(
@@ -15,21 +18,28 @@ block main
                 name="title"
                 required
             )
+            .valid-feedback Looks good!
+            .invalid-feedback Please provide a title.
         .mb-3 
             label.form-label(for="desc") Mô tả
             textarea.form-control#desc(
                 type="text"
                 name="description"
                 rows="5"
+                required
             )
+            .valid-feedback Looks good!
+            .invalid-feedback Please provide a description.
         .mb-3 
             label.form-label(for="price") Giá
             input.form-control#price(
                 type="number"
                 name="price"
-                value="0"
                 min="0"
+                required
             )
+            .valid-feedback Looks good!
+            .invalid-feedback Please provide a price.
         .mb-3 
             label.form-label(for="discount") % Giảm giá
             input.form-control#discount(
@@ -37,15 +47,18 @@ block main
                 name="discountPercentage"
                 value="0"
                 min="0"
+                required
             )
         .mb-3 
             label.form-label(for="stock") Số lượng
             input.form-control#stock(
                 type="number"
                 name="stock"
-                value="0"
                 min="0"
+                required
             )
+            .valid-feedback Looks good!
+            .invalid-feedback Please provide a stock.
         .mb-3(upload-image)
             label.form-label(for="thumbnail") Ảnh
             input.form-control#thumbnail(
@@ -53,6 +66,7 @@ block main
                 name="thumbnail"
                 accept="image/*"
                 upload-image-input
+                required
             )
             .wrap-preview.d-none
                 img.image-preview(
@@ -60,6 +74,8 @@ block main
                     upload-image-preview
                 )
                 span.close-image x
+            .valid-feedback Looks good!
+            .invalid-feedback Please choose a thumbnail.
         .mb-3 
             label.form-label(for="position") Vị trí
             input.form-control#position(
