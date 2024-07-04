@@ -15,8 +15,15 @@ router.get("/create", productController.create);
 router.post(
     "/store",
     upload.single("thumbnail"),
-    validate.post,
-    productController.post
+    validate.handleCreateProduct,
+    productController.handleCreateProduct
+);
+router.get("/edit/:id", productController.edit);
+router.patch(
+    "/edit/:id",
+    upload.single("thumbnail"),
+    validate.handleCreateProduct,
+    productController.handleEditProduct
 );
 
 module.exports = router;

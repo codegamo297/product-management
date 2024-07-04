@@ -7,6 +7,7 @@ include ../../mixins/alert.pug
 
 block main
     +alert-success(2000)
+    +alert-error-not-exits(2000)
 
     h1 Danh sách sản phẩm
 
@@ -83,7 +84,9 @@ block main
                                         button-change-status
                                     ) Dừng hoạt động
                             td
-                                button.btn.btn-warning.btn-sm Sửa
+                                a.btn.btn-warning.btn-sm(
+                                    href=`${prefixAdmin}/products/edit/${item.id}`
+                                ) Sửa
                                 button.btn.btn-danger.btn-sm.ms-2(
                                     btn-delete
                                     data-id=item.id
