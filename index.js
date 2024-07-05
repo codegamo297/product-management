@@ -26,9 +26,9 @@ app.use(express.json()); //request json
 app.use(express.urlencoded({ extended: true })); // request URL-encoded
 
 // Set up
-app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 // Tooltip message (notification)
 app.use(
