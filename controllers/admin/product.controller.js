@@ -204,7 +204,9 @@ module.exports.handleEditProduct = async (req, res) => {
         req.flash("errorUpdate", `Cập nhật không thành công sản phẩm`);
     }
 
-    res.redirect("back");
+    res.redirect(
+        `${systemConfig.prefixAdmin}/products/detail/${req.params.id}`
+    );
 };
 
 // [GET] /admin/products/detail/:id
