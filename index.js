@@ -2,6 +2,7 @@ const express = require("express");
 const methodOverride = require("method-override");
 const flash = require("express-flash");
 const session = require("express-session");
+const path = require("path");
 require("dotenv").config();
 
 const routeClient = require("./routes/client/index.route");
@@ -26,9 +27,9 @@ app.use(express.json()); //request json
 app.use(express.urlencoded({ extended: true })); // request URL-encoded
 
 // Set up
-app.set("views", `${__dirname}/views`);
+app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "pug");
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, "/public")));
 
 // Tooltip message (notification)
 app.use(
