@@ -130,25 +130,27 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/store
 module.exports.handleCreateProduct = async (req, res) => {
-    req.body.price = parseInt(req.body.price);
-    req.body.discountPercentage = parseInt(req.body.discountPercentage);
-    req.body.stock = parseInt(req.body.stock);
+    try {
+        req.body.price = parseInt(req.body.price);
+        req.body.discountPercentage = parseInt(req.body.discountPercentage);
+        req.body.stock = parseInt(req.body.stock);
 
-    if (req.body.position === "") {
-        const countProducts = await Product.countDocuments();
+        if (req.body.position === "") {
+            const countProducts = await Product.countDocuments();
 
-        req.body.position = countProducts + 1;
-    } else {
-        req.body.position = parseInt(req.body.position);
+            req.body.position = countProducts + 1;
+        } else {
+            req.body.position = parseInt(req.body.position);
+        }
+
+        const product = new Product(req.body);
+        await product.save();
+        req.flash("success", `Đã thêm thành công 1 sản phẩm`);
+
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    } catch (error) {
+        res.status(500).send("Internal Server Error");
     }
-
-    if (req.file) req.body.thumbnail = `/uploads/${req.file.filename}`;
-
-    const product = new Product(req.body);
-    await product.save();
-    req.flash("success", `Đã thêm thành công 1 sản phẩm`);
-
-    res.redirect(`${systemConfig.prefixAdmin}/products`);
 };
 
 // [GET] /admin/products/edit/:id
