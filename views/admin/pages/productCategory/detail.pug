@@ -1,0 +1,42 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(2000)
+    +alert-error(3000)
+    
+    if (record.title)
+        h1.mb-4 #{record.title}
+
+    if (record.thumbnail)
+        .mb-4
+            img(
+                src=record.thumbnail
+                alt=record.title 
+                style="width: 200px"
+            )
+    
+    if (record.status)
+        .mb-4 
+            p Trạng thái:    
+            if (record.status === "active")
+                span.badge.text-bg-success Hoạt động
+            else 
+                span.badge.text-bg-danger Dừng hoạt động
+    
+    if (record.position)
+        .mb-4 Vị trí: <b>#{record.position}</b>
+    if (parentRecord)
+        .mb-4 Phần tử cha: <b>#{parentRecord.title}</b>
+    if (record.description)
+        .mb-4
+            h4 Mô tả sản phẩm
+        .mb-4 !{record.description}
+    
+    a.btn.btn-warning.me-3(
+        href=`${prefixAdmin}/products-category/edit/${record._id}`
+    ) Sửa danh mục sản phẩm
+
+    a.btn.btn-secondary(href=`${prefixAdmin}/products-category`) Trở lại
+
+    script(src="/admin/js/products.js")

@@ -182,9 +182,33 @@ module.exports.handleEditProductCategory = async (req, res) => {
         req.flash("error", `Cập nhật không thành công sản phẩm`);
     }
 
-    // res.redirect(
-    //     `${systemConfig.prefixAdmin}/products-category/detail/${req.params.id}`
-    // );
+    res.redirect(
+        `${systemConfig.prefixAdmin}/products-category/detail/${req.params.id}`
+    );
+};
 
-    res.redirect("back");
+// [GET] /admin/products-category/detail/:id
+module.exports.detail = async (req, res) => {
+    try {
+        const record = await ProductCategory.findOne({
+            deleted: false,
+            _id: req.params.id,
+        });
+        let parentRecord;
+        if (record.parent_id) {
+            parentRecord = await ProductCategory.findOne({
+                deleted: false,
+                _id: record.parent_id,
+            });
+        }
+
+        res.render(`admin/pages/productCategory/detail`, {
+            pageTitle: "Chi tiết danh mục sản phẩm",
+            record: record,
+            parentRecord: parentRecord,
+        });
+    } catch (error) {
+        req.flash("error", "Không tồn tại danh mục sản phẩm này");
+        res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+    }
 };
