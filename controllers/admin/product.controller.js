@@ -1,8 +1,10 @@
 const Product = require("../../models/product.model");
+const ProductCategory = require("../../models/product-category.model");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
 const systemConfig = require("../../config/system");
+const createTreeHelper = require("../../helpers/createTree");
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
@@ -138,8 +140,14 @@ module.exports.delete = async (req, res) => {
 
 // [GET] /admin/products/create
 module.exports.create = async (req, res) => {
+    const records = await ProductCategory.find({
+        deleted: false,
+    });
+    const newCategory = createTreeHelper.tree(records);
+
     res.render("admin/pages/products/create", {
         pageTitle: "Thêm mới sản phẩm",
+        category: newCategory,
     });
 };
 
@@ -178,9 +186,15 @@ module.exports.edit = async (req, res) => {
 
         const product = await Product.findOne(find);
 
+        const records = await ProductCategory.find({
+            deleted: false,
+        });
+        const newCategory = createTreeHelper.tree(records);
+
         res.render("admin/pages/products/edit", {
             pageTitle: "Trang sửa sản phẩm",
             product: product,
+            category: newCategory,
         });
     } catch (error) {
         req.flash("error", "Không tồn tại sản phẩm này");
@@ -223,9 +237,17 @@ module.exports.detail = async (req, res) => {
 
         const product = await Product.findOne(find);
 
+        let productCategory;
+        if (product.product_category_id) {
+            productCategory = await ProductCategory.findOne({
+                _id: product.product_category_id,
+            });
+        }
+
         res.render("admin/pages/products/detail", {
             pageTitle: product.title,
             product: product,
+            productCategory: productCategory,
         });
     } catch (error) {
         req.flash("error", "Không tồn tại sản phẩm này");

@@ -21,6 +21,9 @@ block main
                 alt=product.title 
                 style="width: 100px"
             )
+
+    if (productCategory)
+        .mb-4 Loại sản phẩm: <b>#{productCategory.title}</b>
     
     if (product.status)
         .mb-4 

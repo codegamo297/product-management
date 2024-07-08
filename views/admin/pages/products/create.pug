@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main
     +alert-error(3000)
@@ -21,6 +22,14 @@ block main
             )
             .valid-feedback Looks good!
             .invalid-feedback Please provide a title.
+        .mb-3 
+            label.form-label(for="product_category_id") Danh mục 
+            select.form-select#product_category_id(
+                name="product_category_id"
+            )
+                option(value="") -- Chọn danh mục --
+                if (category)
+                    +select-tree(category)
         .mb-3 
             label.form-label(for="desc") Mô tả
             textarea.form-control.text-area-mce#desc(
