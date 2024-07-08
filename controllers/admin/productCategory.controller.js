@@ -212,3 +212,14 @@ module.exports.detail = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/products-category`);
     }
 };
+
+// [DELETE] /admin/products-category/delete/:id
+module.exports.delete = async (req, res) => {
+    await ProductCategory.updateOne(
+        { _id: req.params.id },
+        { deleted: true, deletedAt: new Date() }
+    );
+
+    req.flash("success", `Xóa thành công sản phẩm`);
+    res.redirect("back");
+};

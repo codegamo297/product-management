@@ -33,5 +33,6 @@ router.patch(
     productCategoryController.handleEditProductCategory
 );
 router.get("/detail/:id", productCategoryController.detail);
+router.delete("/delete/:id", productCategoryController.delete);
 
 module.exports = router;
