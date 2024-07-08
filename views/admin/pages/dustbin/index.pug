@@ -1,6 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/pagination.pug
 include ../../mixins/alert.pug
+include ../../mixins/form-change-multi.pug
 
 block main
     +alert-success(2000)
@@ -9,7 +10,11 @@ block main
 
     .card.mb-3
         .card-header Danh sách
-        .card-body            
+        .card-body
+            .row
+                .col-8
+                    +form-change-multi(`${prefixAdmin}/dustbin/change-multi?_method=PATCH`, "pageDustbin")
+
             table.table.table-hover.table-sm(
                 checkbox-multi
             )
@@ -23,14 +28,13 @@ block main
                         th Tiêu đề
                         th Giá
                         th Vị trí
-                        th Trạng thái
                         th Hành động
                 tbody
                     each item, index in products
                         tr
                             td
                                 input(type="checkbox" name="id" value=item.id)
-                            td #{index + 1}
+                            td #{pagination.limitItem * (pagination.currentPage - 1) + (index + 1)}
                             td
                                 img(
                                     src=item.thumbnail
@@ -42,21 +46,6 @@ block main
                             td #{item.title}
                             td #{item.price}$
                             td #{item.position}
-                            td  
-                                if (item.status === "active")
-                                    a.badge.text-bg-success.text-decoration-none(
-                                        href="javascript:;"
-                                        data-id=item.id
-                                        data-status=item.status
-                                        button-change-status
-                                    ) Hoạt động
-                                else
-                                    a.badge.text-bg-danger.text-decoration-none(
-                                        href="javascript:;"
-                                        data-id=item.id
-                                        data-status=item.status
-                                        button-change-status
-                                    ) Dừng hoạt động
                             td
                                 button.btn.btn-warning.btn-sm(
                                     btn-restore 
@@ -66,13 +55,14 @@ block main
                                     btn-delete
                                     data-id=item.id
                                 ) Xóa vĩnh viễn
-    
+
     +pagination(pagination)
 
     form#form-delete-item(
         action="",
         method="POST"
         data-path=`${prefixAdmin}/dustbin/delete`
+        title="Bạn có muốn xóa vĩnh viễn sản phẩm này?"
     )
 
     form#form-restore-item(
@@ -81,4 +71,4 @@ block main
         data-path=`${prefixAdmin}/dustbin/restore`
     )
 
-    script(src="/admin/js/dustbin.js")
+    script(src="/admin/js/products.js")

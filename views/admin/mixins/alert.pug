@@ -6,44 +6,11 @@ mixin alert-success(time)
                 data-time=time
             ) #{messages.success} <span close-alert>x</span>
 
-mixin alert-success-update(time)
-    - if (messages.successUpdate)
-        .message.info
-            p.alert.alert-success(
-                show-alert
-                data-time=time
-            ) #{messages.successUpdate} <span close-alert>x</span>
-
-mixin alert-error-title(time)
-    - if (messages.errorTitle)
+mixin alert-error(time)
+    - if (messages.error)
         .message.info
             p.alert.alert-danger(
                 show-alert
                 data-time=time
-            ) #{messages.errorTitle} <span close-alert>x</span>
-
-mixin alert-error-price(time)
-    - if (messages.errorPrice)
-        .message.info
-            p.alert.alert-danger(
-                show-alert
-                data-time=time
-            ) #{messages.errorPrice} <span close-alert>x</span>
-            
-mixin alert-error-not-exits(time)
-    - if (messages.errorNotExits)
-        .message.info
-            p.alert.alert-danger(
-                show-alert
-                data-time=time
-            ) #{messages.errorNotExits} <span close-alert>x</span>
-
-mixin alert-error-update(time)
-    - if (messages.errorUpdate)
-        .message.info
-            p.alert.alert-danger(
-                show-alert
-                data-time=time
-            ) #{messages.errorUpdate} <span close-alert>x</span>
-
+            ) #{messages.error} <span close-alert>x</span>
         
