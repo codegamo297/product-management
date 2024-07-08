@@ -139,3 +139,52 @@ module.exports.handleCreate = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
+// [GET] /admin/products-category/edit/:id
+module.exports.edit = async (req, res) => {
+    try {
+        const record = await ProductCategory.findOne({
+            deleted: false,
+            _id: req.params.id,
+        });
+
+        const records = await ProductCategory.find({
+            deleted: false,
+        });
+
+        const newRecords = createTreeHelper.tree(records);
+
+        res.render(`admin/pages/productCategory/edit`, {
+            pageTitle: "Sửa danh mục sản phẩm",
+            record: record,
+            records: newRecords,
+        });
+    } catch (error) {
+        req.flash("error", "Không tồn tại danh mục sản phẩm này");
+        res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+    }
+};
+
+// [PATCH] /admin/products-category/:id
+module.exports.handleEditProductCategory = async (req, res) => {
+    req.body.position = parseInt(req.body.position);
+
+    try {
+        await ProductCategory.updateOne(
+            {
+                _id: req.params.id,
+            },
+            req.body
+        );
+
+        req.flash("success", `Đã cập nhật thành công sản phẩm`);
+    } catch (error) {
+        req.flash("error", `Cập nhật không thành công sản phẩm`);
+    }
+
+    // res.redirect(
+    //     `${systemConfig.prefixAdmin}/products-category/detail/${req.params.id}`
+    // );
+
+    res.redirect("back");
+};
