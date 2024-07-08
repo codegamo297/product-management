@@ -6,7 +6,9 @@ const validate = require("../../validates/admin/product.validate");
 const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware");
 
 const router = express.Router();
-const upload = multer();
+const upload = multer({
+    limits: { fieldSize: 2 * 1024 * 1024 },
+});
 
 router.get("/", productController.index);
 router.patch("/change-status/:status/:id", productController.changeStatus);

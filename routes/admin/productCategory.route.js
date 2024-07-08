@@ -6,7 +6,9 @@ const validate = require("../../validates/admin/product-category.validate");
 const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware");
 
 const router = express.Router();
-const upload = multer();
+const upload = multer({
+    limits: { fieldSize: 2 * 1024 * 1024 },
+});
 
 router.get("/", productCategoryController.index);
 router.patch(
@@ -21,6 +23,14 @@ router.post(
     uploadCloud.upload,
     validate.handleCreate,
     productCategoryController.handleCreate
+);
+router.get("/edit/:id", productCategoryController.edit);
+router.patch(
+    "/edit/:id",
+    upload.single("thumbnail"),
+    uploadCloud.upload,
+    validate.handleCreate,
+    productCategoryController.handleEditProductCategory
 );
 
 module.exports = router;
