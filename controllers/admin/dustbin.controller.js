@@ -16,13 +16,19 @@ module.exports.index = async (req, res) => {
             limitItem: 4,
         },
         req.query,
-        countProducts
+        countProducts,
+        "dustbin",
+        res
     );
 
     // Truy cập db
     const products = await Product.find(find)
         .limit(objPagination.limitItem)
         .skip(objPagination.skip);
+
+    if (objPagination.redirectUrl) {
+        return res.redirect(objPagination.redirectUrl);
+    }
 
     res.render("admin/pages/dustbin/index", {
         pageTitle: "Thùng rác",
@@ -43,6 +49,27 @@ module.exports.delete = async (req, res) => {
 module.exports.restore = async (req, res) => {
     await Product.updateOne({ _id: req.params.id }, { deleted: false });
     req.flash("success", `Khôi phục thành công sản phẩm`);
+
+    res.redirect("back");
+};
+
+// [PATCH] /admin/dustbin/change-multi
+module.exports.changeMulti = async (req, res) => {
+    const type = req.body.type;
+    const ids = req.body.ids.split(",");
+
+    switch (type) {
+        case "restore-all":
+            await Product.updateMany({ _id: { $in: ids } }, { deleted: false });
+            req.flash("success", `Khôi phục thành công ${ids.length} sản phẩm`);
+            break;
+        case "delete-all":
+            await Product.deleteMany({ _id: { $in: ids } });
+            req.flash("success", `Xóa thành công ${ids.length} sản phẩm`);
+            break;
+        default:
+            res.json({ message: "Action is invalid" });
+    }
 
     res.redirect("back");
 };

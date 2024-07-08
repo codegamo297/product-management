@@ -28,7 +28,9 @@ module.exports.index = async (req, res) => {
             limitItem: 4,
         },
         req.query,
-        countProducts
+        countProducts,
+        "products",
+        res
     );
 
     // Sort
@@ -45,6 +47,10 @@ module.exports.index = async (req, res) => {
         .sort(sort)
         .limit(objPagination.limitItem)
         .skip(objPagination.skip);
+
+    if (objPagination.redirectUrl) {
+        return res.redirect(objPagination.redirectUrl);
+    }
 
     res.render("admin/pages/products/index", {
         pageTitle: "Danh sách sản phẩm",
@@ -177,7 +183,7 @@ module.exports.edit = async (req, res) => {
             product: product,
         });
     } catch (error) {
-        req.flash("errorNotExits", "Không tồn tại sản phẩm này");
+        req.flash("error", "Không tồn tại sản phẩm này");
         res.redirect(`${systemConfig.prefixAdmin}/products`);
     }
 };
@@ -199,9 +205,9 @@ module.exports.handleEditProduct = async (req, res) => {
             req.body
         );
 
-        req.flash("successUpdate", `Đã cập nhật thành công sản phẩm`);
+        req.flash("success", `Đã cập nhật thành công sản phẩm`);
     } catch (error) {
-        req.flash("errorUpdate", `Cập nhật không thành công sản phẩm`);
+        req.flash("error", `Cập nhật không thành công sản phẩm`);
     }
 
     res.redirect(
@@ -224,7 +230,7 @@ module.exports.detail = async (req, res) => {
             product: product,
         });
     } catch (error) {
-        req.flash("errorNotExits", "Không tồn tại sản phẩm này");
+        req.flash("error", "Không tồn tại sản phẩm này");
         res.redirect(`${systemConfig.prefixAdmin}/products`);
     }
 };

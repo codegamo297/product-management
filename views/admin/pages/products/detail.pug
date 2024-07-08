@@ -1,6 +1,10 @@
 extends ../../layouts/default.pug
+include ../../mixins/alert.pug
 
-block main 
+block main
+    +alert-error(3000)
+    +alert-success(3000)
+
     if (product.title)
         h1.mb-4 #{product.title}
     if (product.price)
@@ -33,8 +37,10 @@ block main
             h4 Mô tả sản phẩm
         .mb-4 !{product.description}
     
-    a.btn.btn-warning(
+    a.btn.btn-warning.me-3(
         href=`${prefixAdmin}/products/edit/${product._id}`
     ) Sửa sản phẩm
+
+    a.btn.btn-secondary(href=`${prefixAdmin}/products`) Trở lại
 
     script(src="/admin/js/products.js")

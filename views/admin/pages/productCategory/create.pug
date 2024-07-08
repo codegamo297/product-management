@@ -1,16 +1,16 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main
-    +alert-error(3000)
-    +alert-success(3000)
-    
-    h1.mb-4 Trang chỉnh sửa sản phẩm
+    h1.mb-4 Thêm mới danh mục sản phẩm 
 
-    form#form-edit-product.needs-validation(
-        action=`${prefixAdmin}/products/edit/${product._id}?_method=PATCH`
-        enctype="multipart/form-data"
+    +alert-error(3000)
+
+    form.needs-validation(
+        action=`${prefixAdmin}/products-category/store`
         method="POST"
+        enctype="multipart/form-data"
         novalidate
     )
         .mb-3 
@@ -18,53 +18,25 @@ block main
             input.form-control#title(
                 type="text"
                 name="title"
-                value=product.title
                 required
             )
             .valid-feedback Looks good!
             .invalid-feedback Please provide a title.
+        .mb-3 
+            label.form-label(for="parent_id") Danh mục cha
+            select.form-select#parent_id(
+                name="parent_id"
+            )
+                option(value="") -- Chọn danh mục cha --
+                if (records)
+                    +select-tree(records)
         .mb-3 
             label.form-label(for="desc") Mô tả
             textarea.form-control.text-area-mce#desc(
                 type="text"
                 name="description"
                 rows="5"
-                value=product.description
-                required
-            ) #{product.description}
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a description.
-        .mb-3 
-            label.form-label(for="price") Giá
-            input.form-control#price(
-                type="number"
-                name="price"
-                min="0"
-                value=product.price
-                required
             )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a price.
-        .mb-3 
-            label.form-label(for="discount") % Giảm giá
-            input.form-control#discount(
-                type="number"
-                name="discountPercentage"
-                value=product.discountPercentage
-                min="0"
-                required
-            )
-        .mb-3 
-            label.form-label(for="stock") Số lượng
-            input.form-control#stock(
-                type="number"
-                name="stock"
-                min="0"
-                value=product.stock
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a stock.
         .mb-3(upload-image)
             label.form-label(for="thumbnail") Ảnh
             input.form-control#thumbnail(
@@ -74,9 +46,9 @@ block main
                 upload-image-input
                 required
             )
-            .wrap-preview
+            .wrap-preview.d-none
                 img.image-preview(
-                    src=product.thumbnail
+                    src=""
                     upload-image-preview
                 )
                 span.close-image x
@@ -89,14 +61,13 @@ block main
                 name="position"
                 placeholder="Tự động tăng"
                 min="1"
-                value=product.position
             )
         .mb-3.form-check.form-check-inline
             input.form-check-input#status-active(
                 type="radio"
                 name="status"
                 value="active"
-                checked=(product.status === "active" ? true : false)
+                checked
             )
             label.form-check-label(for="status-active") Hoạt động
         .mb-3.form-check.form-check-inline
@@ -104,12 +75,8 @@ block main
                 type="radio"
                 name="status"
                 value="inactive"
-                checked=(product.status === "inactive" ? true : false)
             )
             label.form-check-label(for="status-inactive") Dừng hoạt động
-        .mb-3
-            button.btn.btn-primary(type="submit") Cập nhật
-            a.btn.btn-secondary.ms-3(href="/admin/products") Hủy
-        
-
-    script(src="/admin/js/products.js")
+        .mb-3 
+            button.btn.btn-primary.me-3(type="submit") Tạo mới
+            a.btn.btn-secondary(href=`${prefixAdmin}/products-category`) Hủy

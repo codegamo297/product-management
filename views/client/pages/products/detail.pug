@@ -22,7 +22,8 @@ block main
                 if (product.position)
                     .mb-4 Vị trí: <b>#{product.position}</b>
                 if (product.description)
-                    .mb-4 #{product.description}
+                    h4 Mô tả sản phẩm
+                    .mb-4 !{product.description}
 
                 a.btn.btn-warning.mb-4(
                     href=`/products`
