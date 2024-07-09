@@ -3,6 +3,7 @@ const dashboardRoutes = require("./dashboard.route");
 const productRoutes = require("./product.route");
 const dustbinRoutes = require("./dustbin.route");
 const productCategoryRoutes = require("./productCategory.route");
+const roleRoutes = require("./role.route");
 
 module.exports = (app) => {
     app.use(systemConfig.prefixAdmin + "/dashboard", dashboardRoutes);
@@ -12,4 +13,5 @@ module.exports = (app) => {
         productCategoryRoutes
     );
     app.use(systemConfig.prefixAdmin + "/dustbin", dustbinRoutes);
+    app.use(systemConfig.prefixAdmin + "/roles", roleRoutes);
 };

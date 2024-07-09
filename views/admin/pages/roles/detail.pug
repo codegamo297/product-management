@@ -1,0 +1,20 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(3000)
+    +alert-error(3000)
+
+    h1.mb-4 Chi tiết nhóm quyền
+
+    if (record.title)
+        h4.mb-4 #{record.title}
+    if (record.description)
+        .mb-4
+            p Mô tả nhóm quyền: #{record.description}
+    
+    a.btn.btn-warning.me-3(
+        href=`${prefixAdmin}/roles/edit/${record.id}`
+    ) Sửa 
+
+    a.btn.btn-secondary(href=`${prefixAdmin}/roles`) Trở lại trang nhóm quyền
