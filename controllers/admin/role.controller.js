@@ -87,3 +87,28 @@ module.exports.deleteGroup = async (req, res) => {
     req.flash("success", "Đã xóa thành công nhóm quyền");
     res.redirect("back");
 };
+
+// [GET] /admin/roles/permissions
+module.exports.permissions = async (req, res) => {
+    const records = await Roles.find({ deleted: false });
+
+    res.render("admin/pages/roles/permissions", {
+        pageTitle: "Phân quyền",
+        records: records,
+    });
+};
+
+// [PATCH] /admin/roles/permissions
+module.exports.handlePermissions = async (req, res) => {
+    const permissions = JSON.parse(req.body.permissions);
+
+    for (let item of permissions) {
+        await Roles.updateOne(
+            { _id: item.id },
+            { permissions: item.permissions }
+        );
+    }
+
+    req.flash("success", "Đã phân quyền thành công");
+    res.redirect("back");
+};
