@@ -10,5 +10,7 @@ router.get("/edit/:id", roleController.editGroupForm);
 router.patch("/edit/:id", roleController.editGroup);
 router.get("/detail/:id", roleController.detailGroupForm);
 router.delete("/delete/:id", roleController.deleteGroup);
+router.get("/permissions", roleController.permissions);
+router.patch("/permissions", roleController.handlePermissions);
 
 module.exports = router;
