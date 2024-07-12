@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+    h1.mb-4 Chi tiết tài khoản
+    
+    +alert-success(3000)
+    +alert-error(3000)
+
+    if (record.fullName)
+        .mb-4 Tên tài khoản: <b>#{record.fullName}</b>
+    if (record.email)
+        .mb-4 Email: <b>#{record.email}</b>
+    if (record.phone)
+        .mb-4 Số điện thoại: <b>#{record.phone}</b>
+    if (record.avatar)
+        .mb-4
+            img(
+                src=record.avatar
+                alt=record.fullName 
+                style="width: 200px"
+            )
+    if (role)
+        .mb-4 Phân quyền: <b>#{role.title}</b>
+    
+    if (record.status)
+        .mb-4 
+            p Trạng thái:    
+            if (record.status === "active")
+                span.badge.text-bg-success Hoạt động
+            else 
+                span.badge.text-bg-danger Dừng hoạt động
+
+    a.btn.btn-warning.me-3(
+        href=`${prefixAdmin}/accounts/edit/${record.id}`
+    ) Sửa tài khoản
+
+    a.btn.btn-secondary(href=`${prefixAdmin}/accounts`) Trở lại
