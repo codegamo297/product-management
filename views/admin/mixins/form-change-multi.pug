@@ -8,9 +8,14 @@ mixin form-change-multi(path, page)
             .mb-3 
                 select.form-select(name="type")
                     option(disabled selected) Chọn hành động
+                    ss
                     if (page === "pageDustbin")
                         option(value="restore-all") Khôi phục tất cả
                         option(value="delete-all") Xóa vĩnh viễn tất cả
+                    else if (page === "pageAccount")
+                        option(value="active") Hoạt động
+                        option(value="inactive") Dừng hoạt động
+                        option(value="delete-all") Xóa tất cả
                     else
                         option(value="active") Hoạt động
                         option(value="inactive") Dừng hoạt động
