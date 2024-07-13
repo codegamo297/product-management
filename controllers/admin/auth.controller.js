@@ -5,9 +5,32 @@ const systemConfig = require("../../config/system");
 
 // [GET] /admin/auth/login
 module.exports.login = async (req, res) => {
-    res.render("admin/pages/auth/login", {
-        pageTitle: "Trang đăng nhập",
-    });
+    const token = req.cookies.token;
+
+    if (token) {
+        const user = await Accounts.findOne({
+            token: token,
+            deleted: false,
+        });
+
+        if (!user) {
+            res.send("Bạn cố tình sửa token, vì vậy hành động của bạn bị cấm");
+            return;
+        }
+
+        if (user.status === "inactive") {
+            res.send(
+                "Tài khoản của bạn đã bị khóa, vui lòng liên hệ với quản trị viên"
+            );
+            return;
+        }
+
+        res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+    } else {
+        res.render("admin/pages/auth/login", {
+            pageTitle: "Trang đăng nhập",
+        });
+    }
 };
 
 // [POST] /admin/auth/login
