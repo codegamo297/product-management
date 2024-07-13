@@ -1,0 +1,42 @@
+extends ../../layouts/auth.pug
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(2000)
+    +alert-error(2000)
+
+    .container.my-5 
+        .row.justify-content-center
+            .col-8
+                h1.text-center Đăng nhập 
+                form.needs-validation(
+                    action=`${prefixAdmin}/auth/login`
+                    method="POST"
+                    novalidate
+                )
+                    .mb-3   
+                        label.form-label(for="email") Email
+                        input.form-control#email(
+                            type="email"
+                            name="email"
+                            required
+                        )
+                        .valid-feedback Looks good!
+                        .invalid-feedback Please provide a email.
+                    .mb-3   
+                        label.form-label(for="password") Mật khẩu
+                        input.form-control#password(
+                            type="password"
+                            name="password"
+                            required
+                        )
+                        .valid-feedback Looks good!
+                        .invalid-feedback Please provide a password.
+                    .mb-3 
+                        button.btn.btn-primary.btn-block(
+                            type="submit"
+                        ) Đăng nhập
+                        a.btn.btn-secondary.ms-3(
+                            href=`${prefixAdmin}/auth/signup`
+                        ) Đăng ký
+                    
