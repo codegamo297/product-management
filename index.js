@@ -3,6 +3,7 @@ const methodOverride = require("method-override");
 const flash = require("express-flash");
 const session = require("express-session");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const routeClient = require("./routes/client/index.route");
@@ -47,6 +48,9 @@ app.use(
     })
 );
 app.use(flash());
+
+// Cookies
+app.use(cookieParser());
 
 // Routes init
 routeAdmin(app);
