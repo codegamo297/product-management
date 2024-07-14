@@ -3,111 +3,114 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main
-    +alert-error(3000)
+    if (role.permissions.includes("products_create"))
+        +alert-error(3000)
 
-    h1.mb-4 Trang tạo mới sản phẩm
+        h1.mb-4 Trang tạo mới sản phẩm
 
-    form#form-create-product.needs-validation(
-        action=`${prefixAdmin}/products/store`
-        enctype="multipart/form-data"
-        method="POST"
-        novalidate
-    )
-        .mb-3 
-            label.form-label(for="title") Tiêu đề
-            input.form-control#title(
-                type="text"
-                name="title"
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a title.
-        .mb-3 
-            label.form-label(for="product_category_id") Danh mục 
-            select.form-select#product_category_id(
-                name="product_category_id"
-            )
-                option(value="") -- Chọn danh mục --
-                if (category)
-                    +select-tree(category)
-        .mb-3 
-            label.form-label(for="desc") Mô tả
-            textarea.form-control.text-area-mce#desc(
-                type="text"
-                name="description"
-                rows="5"
-            )
-        .mb-3 
-            label.form-label(for="price") Giá
-            input.form-control#price(
-                type="number"
-                name="price"
-                min="0"
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a price.
-        .mb-3 
-            label.form-label(for="discount") % Giảm giá
-            input.form-control#discount(
-                type="number"
-                name="discountPercentage"
-                value="0"
-                min="0"
-                required
-            )
-        .mb-3 
-            label.form-label(for="stock") Số lượng
-            input.form-control#stock(
-                type="number"
-                name="stock"
-                min="0"
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a stock.
-        .mb-3(upload-image)
-            label.form-label(for="thumbnail") Ảnh
-            input.form-control#thumbnail(
-                type="file"
-                name="thumbnail"
-                accept="image/*"
-                upload-image-input
-                required
-            )
-            .wrap-preview.d-none
-                img.image-preview(
-                    src=""
-                    upload-image-preview
+        form#form-create-product.needs-validation(
+            action=`${prefixAdmin}/products/store`
+            enctype="multipart/form-data"
+            method="POST"
+            novalidate
+        )
+            .mb-3 
+                label.form-label(for="title") Tiêu đề
+                input.form-control#title(
+                    type="text"
+                    name="title"
+                    required
                 )
-                span.close-image x
-            .valid-feedback Looks good!
-            .invalid-feedback Please choose a thumbnail.
-        .mb-3 
-            label.form-label(for="position") Vị trí
-            input.form-control#position(
-                type="number"
-                name="position"
-                placeholder="Tự động tăng"
-                min="1"
-            )
-        .mb-3.form-check.form-check-inline
-            input.form-check-input#status-active(
-                type="radio"
-                name="status"
-                value="active"
-                checked
-            )
-            label.form-check-label(for="status-active") Hoạt động
-        .mb-3.form-check.form-check-inline
-            input.form-check-input#status-inactive(
-                type="radio"
-                name="status"
-                value="inactive"
-            )
-            label.form-check-label(for="status-inactive") Dừng hoạt động
-        .mb-3 
-            button.btn.btn-primary.me-3(type="submit") Tạo mới
-            a.btn.btn-secondary(href=`${prefixAdmin}/products`) Hủy
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a title.
+            .mb-3 
+                label.form-label(for="product_category_id") Danh mục 
+                select.form-select#product_category_id(
+                    name="product_category_id"
+                )
+                    option(value="") -- Chọn danh mục --
+                    if (category)
+                        +select-tree(category)
+            .mb-3 
+                label.form-label(for="desc") Mô tả
+                textarea.form-control.text-area-mce#desc(
+                    type="text"
+                    name="description"
+                    rows="5"
+                )
+            .mb-3 
+                label.form-label(for="price") Giá
+                input.form-control#price(
+                    type="number"
+                    name="price"
+                    min="0"
+                    required
+                )
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a price.
+            .mb-3 
+                label.form-label(for="discount") % Giảm giá
+                input.form-control#discount(
+                    type="number"
+                    name="discountPercentage"
+                    value="0"
+                    min="0"
+                    required
+                )
+            .mb-3 
+                label.form-label(for="stock") Số lượng
+                input.form-control#stock(
+                    type="number"
+                    name="stock"
+                    min="0"
+                    required
+                )
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a stock.
+            .mb-3(upload-image)
+                label.form-label(for="thumbnail") Ảnh
+                input.form-control#thumbnail(
+                    type="file"
+                    name="thumbnail"
+                    accept="image/*"
+                    upload-image-input
+                    required
+                )
+                .wrap-preview.d-none
+                    img.image-preview(
+                        src=""
+                        upload-image-preview
+                    )
+                    span.close-image x
+                .valid-feedback Looks good!
+                .invalid-feedback Please choose a thumbnail.
+            .mb-3 
+                label.form-label(for="position") Vị trí
+                input.form-control#position(
+                    type="number"
+                    name="position"
+                    placeholder="Tự động tăng"
+                    min="1"
+                )
+            .mb-3.form-check.form-check-inline
+                input.form-check-input#status-active(
+                    type="radio"
+                    name="status"
+                    value="active"
+                    checked
+                )
+                label.form-check-label(for="status-active") Hoạt động
+            .mb-3.form-check.form-check-inline
+                input.form-check-input#status-inactive(
+                    type="radio"
+                    name="status"
+                    value="inactive"
+                )
+                label.form-check-label(for="status-inactive") Dừng hoạt động
+            .mb-3 
+                button.btn.btn-primary.me-3(type="submit") Tạo mới
+                a.btn.btn-secondary(href=`${prefixAdmin}/products`) Hủy
 
-    script(src="/admin/js/products.js")
+        script(src="/admin/js/products.js")
+    else
+        h1 Bạn không có quyền truy cập

@@ -11,15 +11,20 @@ mixin form-change-multi(path, page)
                     ss
                     if (page === "pageDustbin")
                         option(value="restore-all") Khôi phục tất cả
-                        option(value="delete-all") Xóa vĩnh viễn tất cả
+                        if (role.permissions.includes("dustbins_delete"))
+                            option(value="delete-all") Xóa vĩnh viễn tất cả
                     else if (page === "pageAccount")
                         option(value="active") Hoạt động
                         option(value="inactive") Dừng hoạt động
-                        option(value="delete-all") Xóa tất cả
+                        if (role.permissions.includes("accounts_delete"))
+                            option(value="delete-all") Xóa tất cả
                     else
                         option(value="active") Hoạt động
                         option(value="inactive") Dừng hoạt động
-                        option(value="delete-all") Xóa tất cả
+                        if (role.permissions.includes("products-category_delete"))
+                            option(value="delete-all") Xóa tất cả
+                        if (role.permissions.includes("products_delete"))
+                            option(value="delete-all") Xóa tất cả
                         option(value="change-position") Thay đổi vị trí
             .mb-3
                 input.form-control.d-none(

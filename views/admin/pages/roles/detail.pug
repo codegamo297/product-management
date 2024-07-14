@@ -13,8 +13,9 @@ block main
         .mb-4
             p Mô tả nhóm quyền: #{record.description}
     
-    a.btn.btn-warning.me-3(
-        href=`${prefixAdmin}/roles/edit/${record.id}`
-    ) Sửa 
+    if (role.permissions.includes("roles_edit"))
+        a.btn.btn-warning.me-3(
+            href=`${prefixAdmin}/roles/edit/${record.id}`
+        ) Sửa 
 
     a.btn.btn-secondary(href=`${prefixAdmin}/roles`) Trở lại trang nhóm quyền

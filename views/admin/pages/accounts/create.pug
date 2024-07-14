@@ -2,103 +2,106 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main 
-    h1.mb-4 Thêm mới tài khoản
+    if (role.permissions.includes("accounts_create"))
+        h1.mb-4 Thêm mới tài khoản
 
-    +alert-success(3000)
-    +alert-error(3000)
+        +alert-success(3000)
+        +alert-error(3000)
 
-    if (roles.length > 0)
-        form.needs-validation(
-            action=`${prefixAdmin}/accounts/create`
-            enctype="multipart/form-data"
-            method="POST"
-            novalidate
-        )
-            .mb-3 
-                label.form-label(for="fullName") Họ tên *
-                input.form-control#fullName(
-                    type="text"
-                    name="fullName"
-                    required
-                )
-                .valid-feedback Looks good!
-                .invalid-feedback Please provide a full name.
-            .mb-3 
-                label.form-label(for="email") Email *
-                input.form-control#email(
-                    type="text"
-                    name="email"
-                    required
-                )
-                .valid-feedback Looks good!
-                .invalid-feedback Please provide a email.
-            .mb-3 
-                label.form-label(for="password") Password *
-                input.form-control#password(
-                    type="password"
-                    name="password"
-                    required
-                )
-                .valid-feedback Looks good!
-                .invalid-feedback Please provide a password.
-            .mb-3 
-                label.form-label(for="phone") Số điện thoại
-                input.form-control#phone(
-                    type="text"
-                    name="phone"
-                    required
-                )
-                .valid-feedback Looks good!
-                .invalid-feedback Please provide a phone.
-            .mb-3(upload-image)
-                label.form-label(for="avatar") Avatar
-                input.form-control#avatar(
-                    type="file"
-                    name="avatar"
-                    accept="image/*"
-                    upload-image-input
-                    required
-                )
-                .wrap-preview.d-none
-                    img.image-preview(
-                        src=""
-                        upload-image-preview
+        if (roles.length > 0)
+            form.needs-validation(
+                action=`${prefixAdmin}/accounts/create`
+                enctype="multipart/form-data"
+                method="POST"
+                novalidate
+            )
+                .mb-3 
+                    label.form-label(for="fullName") Họ tên *
+                    input.form-control#fullName(
+                        type="text"
+                        name="fullName"
+                        required
                     )
-                    span.close-image x
-                .valid-feedback Looks good!
-                .invalid-feedback Please choose a avatar.
-            .mb-3 
-                label.form-label(for="role_id") Phân quyền
-                select.form-select#role_id(
-                    name="role_id"
-                )
-                    option(disabled) -- Chọn --
-                    each item in roles
-                        option(value=item.id) #{item.title}
-            .mb-3.form-check.form-check-inline
-                input.form-check-input#statusActive(
-                    type="radio"
-                    name="status"
-                    value="active"
-                    checked
-                )
-                label.form-check-label(for="statusActive") Hoạt động
-            .mb-3.form-check.form-check-inline
-                input.form-check-input#statusInActive(
-                    type="radio"
-                    name="status"
-                    value="active"
-                )
-                label.form-check-label(for="statusInActive") Dừng hoạt động
-            .mb-3
-                button.btn.btn-primary(
-                    type="submit"
-                ) Tạo mới
-                a.btn.btn-secondary.ms-3(
-                    href=`${prefixAdmin}/accounts`
-                ) Hủy
-    else
-        p Bạn chưa có nhóm quyền nào được tạo. Vui lòng tạo nhóm quyền trước!
-        a.btn.btn-primary(
-            href=`${prefixAdmin}/roles/create`
-        ) Tạo nhóm quyền
+                    .valid-feedback Looks good!
+                    .invalid-feedback Please provide a full name.
+                .mb-3 
+                    label.form-label(for="email") Email *
+                    input.form-control#email(
+                        type="text"
+                        name="email"
+                        required
+                    )
+                    .valid-feedback Looks good!
+                    .invalid-feedback Please provide a email.
+                .mb-3 
+                    label.form-label(for="password") Password *
+                    input.form-control#password(
+                        type="password"
+                        name="password"
+                        required
+                    )
+                    .valid-feedback Looks good!
+                    .invalid-feedback Please provide a password.
+                .mb-3 
+                    label.form-label(for="phone") Số điện thoại
+                    input.form-control#phone(
+                        type="text"
+                        name="phone"
+                        required
+                    )
+                    .valid-feedback Looks good!
+                    .invalid-feedback Please provide a phone.
+                .mb-3(upload-image)
+                    label.form-label(for="avatar") Avatar
+                    input.form-control#avatar(
+                        type="file"
+                        name="avatar"
+                        accept="image/*"
+                        upload-image-input
+                        required
+                    )
+                    .wrap-preview.d-none
+                        img.image-preview(
+                            src=""
+                            upload-image-preview
+                        )
+                        span.close-image x
+                    .valid-feedback Looks good!
+                    .invalid-feedback Please choose a avatar.
+                .mb-3 
+                    label.form-label(for="role_id") Phân quyền
+                    select.form-select#role_id(
+                        name="role_id"
+                    )
+                        option(disabled) -- Chọn --
+                        each item in roles
+                            option(value=item.id) #{item.title}
+                .mb-3.form-check.form-check-inline
+                    input.form-check-input#statusActive(
+                        type="radio"
+                        name="status"
+                        value="active"
+                        checked
+                    )
+                    label.form-check-label(for="statusActive") Hoạt động
+                .mb-3.form-check.form-check-inline
+                    input.form-check-input#statusInActive(
+                        type="radio"
+                        name="status"
+                        value="active"
+                    )
+                    label.form-check-label(for="statusInActive") Dừng hoạt động
+                .mb-3
+                    button.btn.btn-primary(
+                        type="submit"
+                    ) Tạo mới
+                    a.btn.btn-secondary.ms-3(
+                        href=`${prefixAdmin}/accounts`
+                    ) Hủy
+        else
+            p Bạn chưa có nhóm quyền nào được tạo. Vui lòng tạo nhóm quyền trước!
+            a.btn.btn-primary(
+                href=`${prefixAdmin}/roles/create`
+            ) Tạo nhóm quyền
+    else 
+        h1 Bạn không có quyền truy cập

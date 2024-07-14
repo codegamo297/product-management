@@ -1,37 +1,40 @@
 extends ../../layouts/default.pug
 
-block main 
-    h1.mb-4 Chỉnh sửa nhóm quyền
+block main
+    if (role.permissions.includes("roles_edit"))
+        h1.mb-4 Chỉnh sửa nhóm quyền
 
-    form.needs-validation(
-        action=`${prefixAdmin}/roles/edit/${record.id}?_method=PATCH`
-        method="POST"
-        novalidate
-    )   
-        .mb-3 
-            label.form-label(for="title") Tiêu đề
-            input.form-control#title(
-                type="text"
-                name="title"
-                value=record.title
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a title.
-        .mb-3 
-            label.form-label(for="desc") Mô tả
-            input.form-control#desc(
-                type="text"
-                name="description"
-                value=record.description
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a description.
-        .mb-3 
-            button.btn.btn-primary(
-                type="submit"
-            ) Cập nhật
-            a.btn.btn-secondary.ms-3(
-                href=`${prefixAdmin}/roles`
-            ) Hủy
+        form.needs-validation(
+            action=`${prefixAdmin}/roles/edit/${record.id}?_method=PATCH`
+            method="POST"
+            novalidate
+        )   
+            .mb-3 
+                label.form-label(for="title") Tiêu đề
+                input.form-control#title(
+                    type="text"
+                    name="title"
+                    value=record.title
+                    required
+                )
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a title.
+            .mb-3 
+                label.form-label(for="desc") Mô tả
+                input.form-control#desc(
+                    type="text"
+                    name="description"
+                    value=record.description
+                    required
+                )
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a description.
+            .mb-3 
+                button.btn.btn-primary(
+                    type="submit"
+                ) Cập nhật
+                a.btn.btn-secondary.ms-3(
+                    href=`${prefixAdmin}/roles`
+                ) Hủy
+    else 
+        h1 Bạn không có quyền truy cập
