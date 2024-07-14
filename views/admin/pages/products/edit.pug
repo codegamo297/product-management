@@ -3,122 +3,125 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main
-    +alert-error(3000)
-    +alert-success(3000)
-    
-    h1.mb-4 Trang chỉnh sửa sản phẩm
-
-    form#form-edit-product.needs-validation(
-        action=`${prefixAdmin}/products/edit/${product._id}?_method=PATCH`
-        enctype="multipart/form-data"
-        method="POST"
-        novalidate
-    )
-        .mb-3 
-            label.form-label(for="title") Tiêu đề
-            input.form-control#title(
-                type="text"
-                name="title"
-                value=product.title
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a title.
-        .mb-3
-            label.form-label(for="product_category_id") Danh mục 
-            select.form-select#product_category_id(
-                name="product_category_id"
-            )
-                option(value="") -- Chọn danh mục --
-                if (category)
-                    +select-tree(category, 0, product.product_category_id)
-        .mb-3 
-            label.form-label(for="desc") Mô tả
-            textarea.form-control.text-area-mce#desc(
-                type="text"
-                name="description"
-                rows="5"
-                value=product.description
-                required
-            ) #{product.description}
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a description.
-        .mb-3 
-            label.form-label(for="price") Giá
-            input.form-control#price(
-                type="number"
-                name="price"
-                min="0"
-                value=product.price
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a price.
-        .mb-3 
-            label.form-label(for="discount") % Giảm giá
-            input.form-control#discount(
-                type="number"
-                name="discountPercentage"
-                value=product.discountPercentage
-                min="0"
-                required
-            )
-        .mb-3 
-            label.form-label(for="stock") Số lượng
-            input.form-control#stock(
-                type="number"
-                name="stock"
-                min="0"
-                value=product.stock
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a stock.
-        .mb-3(upload-image)
-            label.form-label(for="thumbnail") Ảnh
-            input.form-control#thumbnail(
-                type="file"
-                name="thumbnail"
-                accept="image/*"
-                upload-image-input
-                required
-            )
-            .wrap-preview
-                img.image-preview(
-                    src=product.thumbnail
-                    upload-image-preview
-                )
-                span.close-image x
-            .valid-feedback Looks good!
-            .invalid-feedback Please choose a thumbnail.
-        .mb-3 
-            label.form-label(for="position") Vị trí
-            input.form-control#position(
-                type="number"
-                name="position"
-                placeholder="Tự động tăng"
-                min="1"
-                value=product.position
-            )
-        .mb-3.form-check.form-check-inline
-            input.form-check-input#status-active(
-                type="radio"
-                name="status"
-                value="active"
-                checked=(product.status === "active" ? true : false)
-            )
-            label.form-check-label(for="status-active") Hoạt động
-        .mb-3.form-check.form-check-inline
-            input.form-check-input#status-inactive(
-                type="radio"
-                name="status"
-                value="inactive"
-                checked=(product.status === "inactive" ? true : false)
-            )
-            label.form-check-label(for="status-inactive") Dừng hoạt động
-        .mb-3
-            button.btn.btn-primary(type="submit") Cập nhật
-            a.btn.btn-secondary.ms-3(href=`${prefixAdmin}/products`) Hủy
+    if (role.permissions.includes("products_edit"))
+        +alert-error(3000)
+        +alert-success(3000)
         
+        h1.mb-4 Trang chỉnh sửa sản phẩm
 
-    script(src="/admin/js/products.js")
+        form#form-edit-product.needs-validation(
+            action=`${prefixAdmin}/products/edit/${product._id}?_method=PATCH`
+            enctype="multipart/form-data"
+            method="POST"
+            novalidate
+        )
+            .mb-3 
+                label.form-label(for="title") Tiêu đề
+                input.form-control#title(
+                    type="text"
+                    name="title"
+                    value=product.title
+                    required
+                )
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a title.
+            .mb-3
+                label.form-label(for="product_category_id") Danh mục 
+                select.form-select#product_category_id(
+                    name="product_category_id"
+                )
+                    option(value="") -- Chọn danh mục --
+                    if (category)
+                        +select-tree(category, 0, product.product_category_id)
+            .mb-3 
+                label.form-label(for="desc") Mô tả
+                textarea.form-control.text-area-mce#desc(
+                    type="text"
+                    name="description"
+                    rows="5"
+                    value=product.description
+                    required
+                ) #{product.description}
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a description.
+            .mb-3 
+                label.form-label(for="price") Giá
+                input.form-control#price(
+                    type="number"
+                    name="price"
+                    min="0"
+                    value=product.price
+                    required
+                )
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a price.
+            .mb-3 
+                label.form-label(for="discount") % Giảm giá
+                input.form-control#discount(
+                    type="number"
+                    name="discountPercentage"
+                    value=product.discountPercentage
+                    min="0"
+                    required
+                )
+            .mb-3 
+                label.form-label(for="stock") Số lượng
+                input.form-control#stock(
+                    type="number"
+                    name="stock"
+                    min="0"
+                    value=product.stock
+                    required
+                )
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a stock.
+            .mb-3(upload-image)
+                label.form-label(for="thumbnail") Ảnh
+                input.form-control#thumbnail(
+                    type="file"
+                    name="thumbnail"
+                    accept="image/*"
+                    upload-image-input
+                    required
+                )
+                .wrap-preview
+                    img.image-preview(
+                        src=product.thumbnail
+                        upload-image-preview
+                    )
+                    span.close-image x
+                .valid-feedback Looks good!
+                .invalid-feedback Please choose a thumbnail.
+            .mb-3 
+                label.form-label(for="position") Vị trí
+                input.form-control#position(
+                    type="number"
+                    name="position"
+                    placeholder="Tự động tăng"
+                    min="1"
+                    value=product.position
+                )
+            .mb-3.form-check.form-check-inline
+                input.form-check-input#status-active(
+                    type="radio"
+                    name="status"
+                    value="active"
+                    checked=(product.status === "active" ? true : false)
+                )
+                label.form-check-label(for="status-active") Hoạt động
+            .mb-3.form-check.form-check-inline
+                input.form-check-input#status-inactive(
+                    type="radio"
+                    name="status"
+                    value="inactive"
+                    checked=(product.status === "inactive" ? true : false)
+                )
+                label.form-check-label(for="status-inactive") Dừng hoạt động
+            .mb-3
+                button.btn.btn-primary(type="submit") Cập nhật
+                a.btn.btn-secondary.ms-3(href=`${prefixAdmin}/products`) Hủy
+            
+
+        script(src="/admin/js/products.js")
+    else 
+        h1 Bạn không có quyền truy cập

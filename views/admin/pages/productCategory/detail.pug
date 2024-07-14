@@ -33,9 +33,10 @@ block main
             h4 Mô tả sản phẩm
         .mb-4 !{record.description}
     
-    a.btn.btn-warning.me-3(
-        href=`${prefixAdmin}/products-category/edit/${record._id}`
-    ) Sửa danh mục sản phẩm
+    if (role.permissions.includes("products-category_edit"))
+        a.btn.btn-warning.me-3(
+            href=`${prefixAdmin}/products-category/edit/${record._id}`
+        ) Sửa danh mục sản phẩm
 
     a.btn.btn-secondary(href=`${prefixAdmin}/products-category`) Trở lại
 

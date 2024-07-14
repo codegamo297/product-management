@@ -40,9 +40,10 @@ block main
             h4 Mô tả sản phẩm
         .mb-4 !{product.description}
     
-    a.btn.btn-warning.me-3(
-        href=`${prefixAdmin}/products/edit/${product._id}`
-    ) Sửa sản phẩm
+    if (role.permissions.includes("products_edit"))
+        a.btn.btn-warning.me-3(
+            href=`${prefixAdmin}/products/edit/${product._id}`
+        ) Sửa sản phẩm
 
     a.btn.btn-secondary(href=`${prefixAdmin}/products`) Trở lại
 

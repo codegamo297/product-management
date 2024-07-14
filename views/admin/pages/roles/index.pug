@@ -1,56 +1,64 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
-block main 
-    +alert-success(3000)
-    +alert-error(3000)
+block main
+    if (role.permissions.includes("roles_view"))
+        +alert-success(3000)
+        +alert-error(3000)
 
-    h1.mb-4 Nhóm quyền
+        h1.mb-4 Nhóm quyền
 
-    .card.mb-3 
-        .card-header Danh sách
-        .card-body 
-            .row 
-                .col-8
-                .col-4
-                    a.btn.btn-outline-success(
-                        href=`${prefixAdmin}/roles/create`
-                    ) + Thêm mới
-            
-            table.table.table-hover.table-sm.mt-3
-                thead 
-                    tr
-                        th STT 
-                        th Nhóm quyền 
-                        th Mô tả ngắn 
-                        th Hành động
-                tbody
-                    if (records.length > 0)
-                        each item, index in records
-                            tr
-                                td #{index + 1}
-                                td #{item.title}
-                                td #{item.description}
-                                td 
-                                    a.btn.btn-secondary.btn-sm(
-                                        href=`${prefixAdmin}/roles/detail/${item.id}`
-                                    ) Chi tiết
-                                    a.btn.btn-warning.btn-sm.ms-1(
-                                        href=`${prefixAdmin}/roles/edit/${item.id}`
-                                    ) Sửa
-                                    button.btn.btn-danger.btn-sm.ms-1(
-                                        btn-delete
-                                        data-id=item.id
-                                    ) Xóa
-                    else
+        .card.mb-3 
+            .card-header Danh sách
+            .card-body 
+                .row 
+                    .col-8
+                    .col-4
+                        if (role.permissions.includes("roles_create"))
+                            a.btn.btn-outline-success(
+                                href=`${prefixAdmin}/roles/create`
+                            ) + Thêm mới
+                
+                table.table.table-hover.table-sm.mt-3
+                    thead 
                         tr
-                            td.text-center(colspan="4") Chưa có quyền nào được tạo
-    
-    form#form-delete-item(
-        action="",
-        method="POST"
-        data-path=`${prefixAdmin}/roles/delete`
-        title="Bạn có muốn xóa nhóm quyền này?"
-    )
+                            th STT 
+                            th Nhóm quyền 
+                            th Mô tả ngắn 
+                            th Hành động
+                    tbody
+                        if (records.length > 0)
+                            each item, index in records
+                                tr
+                                    td #{index + 1}
+                                    td #{item.title}
+                                    td #{item.description}
+                                    td 
+                                        a.btn.btn-secondary.btn-sm(
+                                            href=`${prefixAdmin}/roles/detail/${item.id}`
+                                        ) Chi tiết
 
-    script(src="/admin/js/products.js")
+                                        if (role.permissions.includes("roles_edit"))
+                                            a.btn.btn-warning.btn-sm.ms-1(
+                                                href=`${prefixAdmin}/roles/edit/${item.id}`
+                                            ) Sửa
+
+                                        if (role.permissions.includes("roles_delete"))
+                                            button.btn.btn-danger.btn-sm.ms-1(
+                                                btn-delete
+                                                data-id=item.id
+                                            ) Xóa
+                        else
+                            tr
+                                td.text-center(colspan="4") Chưa có quyền nào được tạo
+        
+        form#form-delete-item(
+            action="",
+            method="POST"
+            data-path=`${prefixAdmin}/roles/delete`
+            title="Bạn có muốn xóa nhóm quyền này?"
+        )
+
+        script(src="/admin/js/products.js")
+    else
+        h1 Bạn không có quyền truy cập

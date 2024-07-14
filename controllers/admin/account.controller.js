@@ -131,7 +131,7 @@ module.exports.detail = async (req, res) => {
         _id: req.params.id,
         deleted: false,
     });
-    const role = await Roles.findOne({
+    const permission = await Roles.findOne({
         _id: record.role_id,
         deleted: false,
     });
@@ -139,7 +139,7 @@ module.exports.detail = async (req, res) => {
     res.render("admin/pages/accounts/detail", {
         pageTitle: "Chi tiết tài khoản",
         record: record,
-        role: role,
+        permission: permission,
     });
 };
 

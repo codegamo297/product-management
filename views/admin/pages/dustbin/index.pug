@@ -4,71 +4,78 @@ include ../../mixins/alert.pug
 include ../../mixins/form-change-multi.pug
 
 block main
-    +alert-success(2000)
-    
-    h1 Thùng rác
+    if (role.permissions.includes("dustbins_view"))
+        +alert-success(2000)
+        
+        h1 Thùng rác
 
-    .card.mb-3
-        .card-header Danh sách
-        .card-body
-            .row
-                .col-8
-                    +form-change-multi(`${prefixAdmin}/dustbin/change-multi?_method=PATCH`, "pageDustbin")
+        .card.mb-3
+            .card-header Danh sách
+            .card-body
+                .row
+                    .col-8
+                        if (role.permissions.includes("dustbins_restore"))
+                            +form-change-multi(`${prefixAdmin}/dustbin/change-multi?_method=PATCH`, "pageDustbin")
 
-            table.table.table-hover.table-sm(
-                checkbox-multi
-            )
-                thead
-                    tr
-                        th
-                            input(type="checkbox" name="checkAll") 
-                            label.ms-1 Chọn tất cả
-                        th STT
-                        th Hình ảnh
-                        th Tiêu đề
-                        th Giá
-                        th Vị trí
-                        th Hành động
-                tbody
-                    each item, index in products
+                table.table.table-hover.table-sm(
+                    checkbox-multi
+                )
+                    thead
                         tr
-                            td
-                                input(type="checkbox" name="id" value=item.id)
-                            td #{pagination.limitItem * (pagination.currentPage - 1) + (index + 1)}
-                            td
-                                img(
-                                    src=item.thumbnail
-                                    alt=item.title
-                                    width="100px"
-                                    height="100px"
-                                    object-fit="contain"
-                                )
-                            td #{item.title}
-                            td #{item.price}$
-                            td #{item.position}
-                            td
-                                button.btn.btn-warning.btn-sm(
-                                    btn-restore 
-                                    data-id=item.id
-                                ) Khôi phục
-                                button.btn.btn-danger.btn-sm.ms-2(
-                                    btn-delete
-                                    data-id=item.id
-                                ) Xóa vĩnh viễn
+                            th
+                                input(type="checkbox" name="checkAll") 
+                                label.ms-1 Chọn tất cả
+                            th STT
+                            th Hình ảnh
+                            th Tiêu đề
+                            th Giá
+                            th Vị trí
+                            th Hành động
+                    tbody
+                        each item, index in products
+                            tr
+                                td
+                                    input(type="checkbox" name="id" value=item.id)
+                                td #{pagination.limitItem * (pagination.currentPage - 1) + (index + 1)}
+                                td
+                                    img(
+                                        src=item.thumbnail
+                                        alt=item.title
+                                        width="100px"
+                                        height="100px"
+                                        object-fit="contain"
+                                    )
+                                td #{item.title}
+                                td #{item.price}$
+                                td #{item.position}
+                                td
+                                    if (role.permissions.includes("dustbins_restore"))
+                                        button.btn.btn-warning.btn-sm(
+                                            btn-restore 
+                                            data-id=item.id
+                                        ) Khôi phục
+                                    
+                                    if (role.permissions.includes("dustbins_delete"))
+                                        button.btn.btn-danger.btn-sm.ms-2(
+                                            btn-delete
+                                            data-id=item.id
+                                        ) Xóa vĩnh viễn
 
-    +pagination(pagination)
+        +pagination(pagination)
 
-    form#form-delete-item(
-        action="",
-        method="POST"
-        data-path=`${prefixAdmin}/dustbin/delete`
-        title="Bạn có muốn xóa vĩnh viễn sản phẩm này?"
-    )
+        form#form-delete-item(
+            action="",
+            method="POST"
+            data-path=`${prefixAdmin}/dustbin/delete`
+            title="Bạn có muốn xóa vĩnh viễn sản phẩm này?"
+        )
 
-    form#form-restore-item(
-        action="",
-        method="POST"
-        data-path=`${prefixAdmin}/dustbin/restore`
-    )
+        form#form-restore-item(
+            action="",
+            method="POST"
+            data-path=`${prefixAdmin}/dustbin/restore`
+        )
 
-    script(src="/admin/js/products.js")
+        script(src="/admin/js/products.js")
+    else 
+        h1 Bạn không có quyền truy cập

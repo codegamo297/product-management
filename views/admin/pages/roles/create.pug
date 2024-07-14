@@ -1,32 +1,35 @@
 extends ../../layouts/default.pug
 
-block main 
-    h1.mb-4 Thêm mới nhóm quyền
+block main
+    if (role.permissions.includes("roles_create"))
+        h1.mb-4 Thêm mới nhóm quyền
 
-    form.needs-validation(
-        action=`${prefixAdmin}/roles/create`
-        method="POST"
-        novalidate
-    )
-        .mb-3 
-            label.form-label(for="title") Tiêu đề
-            input.form-control#title(
-                type="text"
-                name="title"
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a title.
-        .mb-3 
-            label.form-label(for="desc") Mô tả
-            input.form-control#desc(
-                type="text"
-                name="description"
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a description.
-        .mb-3 
-            button.btn.btn-primary(
-                type="submit"
-            ) Tạo mới
+        form.needs-validation(
+            action=`${prefixAdmin}/roles/create`
+            method="POST"
+            novalidate
+        )
+            .mb-3 
+                label.form-label(for="title") Tiêu đề
+                input.form-control#title(
+                    type="text"
+                    name="title"
+                    required
+                )
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a title.
+            .mb-3 
+                label.form-label(for="desc") Mô tả
+                input.form-control#desc(
+                    type="text"
+                    name="description"
+                    required
+                )
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a description.
+            .mb-3 
+                button.btn.btn-primary(
+                    type="submit"
+                ) Tạo mới
+    else 
+        h1 Bạn không có quyền truy cập

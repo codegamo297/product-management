@@ -3,80 +3,83 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main
-    h1.mb-4 Thêm mới danh mục sản phẩm 
+    if (role.permissions.includes("products-category_create"))
+        h1.mb-4 Thêm mới danh mục sản phẩm 
 
-    +alert-error(3000)
+        +alert-error(3000)
 
-    form.needs-validation(
-        action=`${prefixAdmin}/products-category/store`
-        method="POST"
-        enctype="multipart/form-data"
-        novalidate
-    )
-        .mb-3 
-            label.form-label(for="title") Tiêu đề
-            input.form-control#title(
-                type="text"
-                name="title"
-                required
-            )
-            .valid-feedback Looks good!
-            .invalid-feedback Please provide a title.
-        .mb-3 
-            label.form-label(for="parent_id") Danh mục cha
-            select.form-select#parent_id(
-                name="parent_id"
-            )
-                option(value="") -- Chọn danh mục cha --
-                if (records)
-                    +select-tree(records)
-        .mb-3 
-            label.form-label(for="desc") Mô tả
-            textarea.form-control.text-area-mce#desc(
-                type="text"
-                name="description"
-                rows="5"
-            )
-        .mb-3(upload-image)
-            label.form-label(for="thumbnail") Ảnh
-            input.form-control#thumbnail(
-                type="file"
-                name="thumbnail"
-                accept="image/*"
-                upload-image-input
-                required
-            )
-            .wrap-preview.d-none
-                img.image-preview(
-                    src=""
-                    upload-image-preview
+        form.needs-validation(
+            action=`${prefixAdmin}/products-category/store`
+            method="POST"
+            enctype="multipart/form-data"
+            novalidate
+        )
+            .mb-3 
+                label.form-label(for="title") Tiêu đề
+                input.form-control#title(
+                    type="text"
+                    name="title"
+                    required
                 )
-                span.close-image x
-            .valid-feedback Looks good!
-            .invalid-feedback Please choose a thumbnail.
-        .mb-3 
-            label.form-label(for="position") Vị trí
-            input.form-control#position(
-                type="number"
-                name="position"
-                placeholder="Tự động tăng"
-                min="1"
-            )
-        .mb-3.form-check.form-check-inline
-            input.form-check-input#status-active(
-                type="radio"
-                name="status"
-                value="active"
-                checked
-            )
-            label.form-check-label(for="status-active") Hoạt động
-        .mb-3.form-check.form-check-inline
-            input.form-check-input#status-inactive(
-                type="radio"
-                name="status"
-                value="inactive"
-            )
-            label.form-check-label(for="status-inactive") Dừng hoạt động
-        .mb-3 
-            button.btn.btn-primary.me-3(type="submit") Tạo mới
-            a.btn.btn-secondary(href=`${prefixAdmin}/products-category`) Hủy
+                .valid-feedback Looks good!
+                .invalid-feedback Please provide a title.
+            .mb-3 
+                label.form-label(for="parent_id") Danh mục cha
+                select.form-select#parent_id(
+                    name="parent_id"
+                )
+                    option(value="") -- Chọn danh mục cha --
+                    if (records)
+                        +select-tree(records)
+            .mb-3 
+                label.form-label(for="desc") Mô tả
+                textarea.form-control.text-area-mce#desc(
+                    type="text"
+                    name="description"
+                    rows="5"
+                )
+            .mb-3(upload-image)
+                label.form-label(for="thumbnail") Ảnh
+                input.form-control#thumbnail(
+                    type="file"
+                    name="thumbnail"
+                    accept="image/*"
+                    upload-image-input
+                    required
+                )
+                .wrap-preview.d-none
+                    img.image-preview(
+                        src=""
+                        upload-image-preview
+                    )
+                    span.close-image x
+                .valid-feedback Looks good!
+                .invalid-feedback Please choose a thumbnail.
+            .mb-3 
+                label.form-label(for="position") Vị trí
+                input.form-control#position(
+                    type="number"
+                    name="position"
+                    placeholder="Tự động tăng"
+                    min="1"
+                )
+            .mb-3.form-check.form-check-inline
+                input.form-check-input#status-active(
+                    type="radio"
+                    name="status"
+                    value="active"
+                    checked
+                )
+                label.form-check-label(for="status-active") Hoạt động
+            .mb-3.form-check.form-check-inline
+                input.form-check-input#status-inactive(
+                    type="radio"
+                    name="status"
+                    value="inactive"
+                )
+                label.form-check-label(for="status-inactive") Dừng hoạt động
+            .mb-3 
+                button.btn.btn-primary.me-3(type="submit") Tạo mới
+                a.btn.btn-secondary(href=`${prefixAdmin}/products-category`) Hủy
+    else
+        h1 Bạn không có quyền truy cập
