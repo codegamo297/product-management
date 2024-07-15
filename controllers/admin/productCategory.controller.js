@@ -1,4 +1,6 @@
 const ProductCategory = require("../../models/product-category.model");
+const Accounts = require("../../models/account.model");
+
 const systemConfig = require("../../config/system");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
@@ -29,6 +31,26 @@ module.exports.index = async (req, res) => {
 
     // Truy cập db
     const records = await ProductCategory.find(find).sort(sort);
+    for (const record of records) {
+        // Lấy in4 người tạo
+        const userCreated = await Accounts.findOne({
+            _id: record.createdBy.account_id,
+        });
+
+        if (userCreated) record.accountCreateFullName = userCreated.fullName;
+
+        // Lấy in4 người cập nhật
+        const updatedBy = record.updatedBy.slice(-1)[0];
+
+        if (updatedBy) {
+            const userUpdated = await Accounts.findOne({
+                _id: updatedBy.account_id,
+            });
+
+            updatedBy.accountFullName = userUpdated.fullName;
+        }
+    }
+
     const newRecords = createTreeHelper.tree(records);
 
     res.render("admin/pages/productCategory/index", {
@@ -42,7 +64,14 @@ module.exports.index = async (req, res) => {
 // [PATCH] /admin/products-category/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
     const { status, id } = req.params;
-    await ProductCategory.updateOne({ _id: id }, { status: status });
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date(),
+    };
+    await ProductCategory.updateOne(
+        { _id: id },
+        { status: status, $push: { updatedBy: updatedBy } }
+    );
 
     req.flash("success", "Cập nhật trạng thái thành công");
     res.redirect("back");
@@ -52,12 +81,16 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(",");
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date(),
+    };
 
     switch (type) {
         case "active":
             await ProductCategory.updateMany(
                 { _id: { $in: ids } },
-                { status: "active" }
+                { status: "active", $push: { updatedBy: updatedBy } }
             );
             req.flash(
                 "success",
@@ -67,7 +100,7 @@ module.exports.changeMulti = async (req, res) => {
         case "inactive":
             await ProductCategory.updateMany(
                 { _id: { $in: ids } },
-                { status: "inactive" }
+                { status: "inactive", $push: { updatedBy: updatedBy } }
             );
             req.flash(
                 "success",
@@ -77,7 +110,13 @@ module.exports.changeMulti = async (req, res) => {
         case "delete-all":
             await ProductCategory.updateMany(
                 { _id: { $in: ids } },
-                { deleted: true, deletedAt: new Date() }
+                {
+                    deleted: true,
+                    deletedBy: {
+                        account_id: res.locals.user.id,
+                        deletedAt: new Date(),
+                    },
+                }
             );
             req.flash("success", `Xóa thành công ${ids.length} sản phẩm`);
             break;
@@ -88,7 +127,7 @@ module.exports.changeMulti = async (req, res) => {
                 position = parseInt(position);
                 await ProductCategory.updateOne(
                     { _id: id },
-                    { position: position }
+                    { position: position, $push: { updatedBy: updatedBy } }
                 );
             }
             req.flash(
@@ -130,6 +169,10 @@ module.exports.handleCreate = async (req, res) => {
             req.body.position = parseInt(req.body.position);
         }
 
+        req.body.createdBy = {
+            account_id: res.locals.user.id,
+        };
+
         const record = new ProductCategory(req.body);
         await record.save();
 
@@ -168,13 +211,16 @@ module.exports.edit = async (req, res) => {
 // [PATCH] /admin/products-category/:id
 module.exports.handleEditProductCategory = async (req, res) => {
     req.body.position = parseInt(req.body.position);
-
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date(),
+    };
     try {
         await ProductCategory.updateOne(
             {
                 _id: req.params.id,
             },
-            req.body
+            { ...req.body, $push: { updatedBy: updatedBy } }
         );
 
         req.flash("success", `Đã cập nhật thành công sản phẩm`);
@@ -217,7 +263,13 @@ module.exports.detail = async (req, res) => {
 module.exports.delete = async (req, res) => {
     await ProductCategory.updateOne(
         { _id: req.params.id },
-        { deleted: true, deletedAt: new Date() }
+        {
+            deleted: true,
+            deletedBy: {
+                account_id: res.locals.user.id,
+                deletedAt: new Date(),
+            },
+        }
     );
 
     req.flash("success", `Xóa thành công sản phẩm`);
