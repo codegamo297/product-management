@@ -33,6 +33,10 @@ const productSchema = new Schema({
         account_id: String,
         deletedAt: Date,
     },
+    restoredBy: {
+        account_id: String,
+        restoredAt: Date,
+    },
 });
 
 module.exports = mongoose.model("Product", productSchema, "products");

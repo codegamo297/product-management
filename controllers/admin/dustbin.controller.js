@@ -59,7 +59,16 @@ module.exports.delete = async (req, res) => {
 
 // [PATCH] /admin/dustbin/restore/:id
 module.exports.restore = async (req, res) => {
-    await Product.updateOne({ _id: req.params.id }, { deleted: false });
+    await Product.updateOne(
+        { _id: req.params.id },
+        {
+            deleted: false,
+            restoredBy: {
+                account_id: res.locals.user.id,
+                restoredAt: new Date(),
+            },
+        }
+    );
     req.flash("success", `Khôi phục thành công sản phẩm`);
 
     res.redirect("back");
@@ -72,7 +81,16 @@ module.exports.changeMulti = async (req, res) => {
 
     switch (type) {
         case "restore-all":
-            await Product.updateMany({ _id: { $in: ids } }, { deleted: false });
+            await Product.updateMany(
+                { _id: { $in: ids } },
+                {
+                    deleted: false,
+                    restoredBy: {
+                        account_id: res.locals.user.id,
+                        restoredAt: new Date(),
+                    },
+                }
+            );
             req.flash("success", `Khôi phục thành công ${ids.length} sản phẩm`);
             break;
         case "delete-all":
