@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 
 block main
     if (role.permissions.includes("roles_view"))
@@ -25,6 +26,8 @@ block main
                             th STT 
                             th Nhóm quyền 
                             th Mô tả ngắn 
+                            th Người tạo
+                            th Người cập nhật
                             th Hành động
                     tbody
                         if (records.length > 0)
@@ -33,6 +36,17 @@ block main
                                     td #{index + 1}
                                     td #{item.title}
                                     td #{item.description}
+                                    td 
+                                        if (item.accountCreatedFullName)
+                                            p #{item.accountCreatedFullName}
+                                            p 
+                                                +formatDateTime(item.createdBy.createdAt)
+                                    td 
+                                        - const updatedBy = item.updatedBy.slice(-1)[0];
+                                        if (updatedBy)
+                                            p #{updatedBy.accountFullName}
+                                            p 
+                                                +formatDateTime(updatedBy.updatedAt)
                                     td 
                                         a.btn.btn-secondary.btn-sm(
                                             href=`${prefixAdmin}/roles/detail/${item.id}`

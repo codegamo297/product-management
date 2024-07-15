@@ -1,4 +1,6 @@
 const Roles = require("../../models/role.model");
+const Accounts = require("../../models/account.model");
+
 const systemConfig = require("../../config/system");
 
 // [GET] /admin/roles
@@ -6,6 +8,28 @@ module.exports.index = async (req, res) => {
     const records = await Roles.find({
         deleted: false,
     });
+
+    for (const record of records) {
+        // Lấy in4 người tạo
+        const creator = await Accounts.findOne({
+            _id: record.createdBy.account_id,
+        });
+
+        if (creator) {
+            record.accountCreatedFullName = creator.fullName;
+        }
+
+        // Lấy in4 người cập nhật
+        const updatedBy = record.updatedBy.slice(-1)[0];
+
+        if (updatedBy) {
+            const userUpdated = await Accounts.findOne({
+                _id: updatedBy.account_id,
+            });
+
+            updatedBy.accountFullName = userUpdated.fullName;
+        }
+    }
 
     res.render("admin/pages/roles/index", {
         pageTitle: "Nhóm quyền",
@@ -22,6 +46,10 @@ module.exports.createGroupForm = async (req, res) => {
 
 // [POST] /admin/roles/create
 module.exports.createGroup = async (req, res) => {
+    req.body.createdBy = {
+        account_id: res.locals.user.id,
+    };
+
     const record = new Roles(req.body);
     await record.save();
 
@@ -49,8 +77,15 @@ module.exports.editGroupForm = async (req, res) => {
 
 // [PATCH] /admin/roles/edit/:id
 module.exports.editGroup = async (req, res) => {
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date(),
+    };
     try {
-        await Roles.updateOne({ _id: req.params.id }, req.body);
+        await Roles.updateOne(
+            { _id: req.params.id },
+            { ...req.body, $push: { updatedBy: updatedBy } }
+        );
 
         req.flash("success", `Đã cập nhật thành công nhóm quyền`);
     } catch (error) {
@@ -82,7 +117,13 @@ module.exports.detailGroupForm = async (req, res) => {
 module.exports.deleteGroup = async (req, res) => {
     await Roles.updateOne(
         { _id: req.params.id },
-        { deleted: true, deletedAt: new Date() }
+        {
+            deleted: true,
+            deletedBy: {
+                account_id: res.locals.user.id,
+                deletedAt: new Date(),
+            },
+        }
     );
     req.flash("success", "Đã xóa thành công nhóm quyền");
     res.redirect("back");
@@ -101,11 +142,15 @@ module.exports.permissions = async (req, res) => {
 // [PATCH] /admin/roles/permissions
 module.exports.handlePermissions = async (req, res) => {
     const permissions = JSON.parse(req.body.permissions);
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date(),
+    };
 
     for (let item of permissions) {
         await Roles.updateOne(
             { _id: item.id },
-            { permissions: item.permissions }
+            { permissions: item.permissions, $push: { updatedBy: updatedBy } }
         );
     }
 
