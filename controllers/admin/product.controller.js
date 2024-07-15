@@ -54,12 +54,12 @@ module.exports.index = async (req, res) => {
 
     for (const product of products) {
         // Lấy ra in4 người tạo
-        const user = await Accounts.findOne({
+        const userCreated = await Accounts.findOne({
             _id: product.createdBy.account_id,
         });
 
-        if (user) {
-            product.accountFullName = user.fullName;
+        if (userCreated) {
+            product.accountFullName = userCreated.fullName;
         }
 
         // Lấy ra in4 người cập nhật gần nhất
@@ -71,6 +71,15 @@ module.exports.index = async (req, res) => {
             });
 
             updatedBy.accountFullName = userUpdated.fullName;
+        }
+
+        // Lấy ra in4 người khôi phục
+        const userRestored = await Accounts.findOne({
+            _id: product.restoredBy.account_id,
+        });
+
+        if (userRestored) {
+            product.accountRestoreFullName = userRestored.fullName;
         }
     }
 

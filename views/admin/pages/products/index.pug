@@ -58,6 +58,7 @@ block main
                             th Trạng thái
                             th Người tạo
                             th Người cập nhật
+                            th Người khôi phục
                             th Hành động
                     tbody
                         each item, index in products
@@ -119,6 +120,11 @@ block main
                                         p #{updatedBy.accountFullName}
                                         p 
                                             +formatDateTime(updatedBy.updatedAt)
+                                td
+                                    if (item.accountRestoreFullName)
+                                        p #{item.accountRestoreFullName}
+                                        p 
+                                            +formatDateTime(item.restoredBy.restoredAt)
                                 td
                                     a.btn.btn-info.btn-sm(
                                         href=`${prefixAdmin}/products/detail/${item.id}`
