@@ -16,7 +16,6 @@ const productCategorySchema = new Schema({
     position: Number,
     slug: { type: String, slug: "title", unique: true },
     deleted: { type: Boolean, default: false },
-    deletedAt: Date,
     createdBy: {
         account_id: String,
         createdAt: { type: Date, default: new Date() },

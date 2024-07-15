@@ -2,6 +2,7 @@ const md5 = require("md5");
 
 const Accounts = require("../../models/account.model");
 const Roles = require("../../models/role.model");
+
 const systemConfig = require("../../config/system");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
@@ -22,7 +23,7 @@ module.exports.index = async (req, res) => {
     if (objSearch.regexKeyword) find.fullName = objSearch.regexKeyword;
 
     const records = await Accounts.find(find).select(
-        "fullName email phone avatar status role_id"
+        "fullName email phone avatar status role_id createdBy updatedBy"
     );
 
     for (let record of records) {
@@ -32,6 +33,26 @@ module.exports.index = async (req, res) => {
         });
 
         record.role = role;
+
+        // Lấy in4 người tạo
+        const creator = await Accounts.findOne({
+            _id: record.createdBy.account_id,
+        });
+
+        if (creator) {
+            record.accountFullName = creator.fullName;
+        }
+
+        // Lấy in4 người cập nhật
+        const updatedBy = record.updatedBy.slice(-1)[0];
+
+        if (updatedBy) {
+            const userUpdated = await Accounts.findOne({
+                _id: updatedBy.account_id,
+            });
+
+            updatedBy.accountFullName = userUpdated.fullName;
+        }
     }
 
     res.render("admin/pages/accounts/index", {
@@ -65,6 +86,10 @@ module.exports.handleCreate = async (req, res) => {
         req.flash("error", "Email đã tồn tại");
         res.redirect("back");
     } else {
+        req.body.createdBy = {
+            account_id: res.locals.user.id,
+        };
+
         const record = new Accounts(req.body);
         await record.save();
 
@@ -111,7 +136,15 @@ module.exports.handleEdit = async (req, res) => {
                 delete req.body.password;
             }
 
-            await Accounts.updateOne({ _id: req.params.id }, req.body);
+            const updatedBy = {
+                account_id: res.locals.user.id,
+                updatedAt: new Date(),
+            };
+
+            await Accounts.updateOne(
+                { _id: req.params.id },
+                { ...req.body, $push: { updatedBy: updatedBy } }
+            );
             req.flash("success", `Đã cập nhật thành công tài khoản`);
             res.redirect(
                 `${systemConfig.prefixAdmin}/accounts/detail/${req.params.id}`
@@ -147,7 +180,13 @@ module.exports.detail = async (req, res) => {
 module.exports.delete = async (req, res) => {
     await Accounts.updateOne(
         { _id: req.params.id },
-        { deleted: true, deletedAt: new Date() }
+        {
+            deleted: true,
+            deletedBy: {
+                account_id: res.locals.user.id,
+                deletedAt: new Date(),
+            },
+        }
     );
 
     req.flash("success", "Đã xóa thành công tài khoản");
@@ -156,9 +195,14 @@ module.exports.delete = async (req, res) => {
 
 // [PATCH] /admin/accounts/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date(),
+    };
+
     await Accounts.updateOne(
         { _id: req.params.id },
-        { status: req.params.status }
+        { status: req.params.status, $push: { updatedBy: updatedBy } }
     );
     req.flash("success", "Cập nhật trạng thái tài khoản thành công");
 
@@ -169,12 +213,16 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(",");
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date(),
+    };
 
     switch (type) {
         case "active":
             await Accounts.updateMany(
                 { _id: { $in: ids } },
-                { status: "active" }
+                { status: "active", $push: { updatedBy: updatedBy } }
             );
             req.flash(
                 "success",
@@ -184,7 +232,7 @@ module.exports.changeMulti = async (req, res) => {
         case "inactive":
             await Accounts.updateMany(
                 { _id: { $in: ids } },
-                { status: "inactive" }
+                { status: "inactive", $push: { updatedBy: updatedBy } }
             );
             req.flash(
                 "success",
@@ -194,7 +242,13 @@ module.exports.changeMulti = async (req, res) => {
         case "delete-all":
             await Accounts.updateMany(
                 { _id: { $in: ids } },
-                { deleted: true, deletedAt: new Date() }
+                {
+                    deleted: true,
+                    deletedBy: {
+                        account_id: res.locals.user.id,
+                        deletedAt: new Date(),
+                    },
+                }
             );
             req.flash("success", `Xóa thành công ${ids.length} tài khoản`);
             break;
