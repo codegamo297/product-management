@@ -4,6 +4,7 @@ const flash = require("express-flash");
 const session = require("express-session");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const moment = require("moment");
 require("dotenv").config();
 
 const routeClient = require("./routes/client/index.route");
@@ -19,6 +20,7 @@ app.use(methodOverride("_method"));
 
 // App locals variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
 
 // Connect DB
 database.connect();

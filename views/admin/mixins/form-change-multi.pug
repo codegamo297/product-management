@@ -8,7 +8,6 @@ mixin form-change-multi(path, page)
             .mb-3 
                 select.form-select(name="type")
                     option(disabled selected) Chọn hành động
-                    ss
                     if (page === "pageDustbin")
                         option(value="restore-all") Khôi phục tất cả
                         if (role.permissions.includes("dustbins_delete"))
@@ -18,12 +17,16 @@ mixin form-change-multi(path, page)
                         option(value="inactive") Dừng hoạt động
                         if (role.permissions.includes("accounts_delete"))
                             option(value="delete-all") Xóa tất cả
-                    else
+                    else if (page === "pageProduct")
+                        option(value="active") Hoạt động
+                        option(value="inactive") Dừng hoạt động
+                        if (role.permissions.includes("products_delete"))
+                            option(value="delete-all") Xóa tất cả
+                        option(value="change-position") Thay đổi vị trí
+                    else if (page === "pageProductCategory")
                         option(value="active") Hoạt động
                         option(value="inactive") Dừng hoạt động
                         if (role.permissions.includes("products-category_delete"))
-                            option(value="delete-all") Xóa tất cả
-                        if (role.permissions.includes("products_delete"))
                             option(value="delete-all") Xóa tất cả
                         option(value="change-position") Thay đổi vị trí
             .mb-3

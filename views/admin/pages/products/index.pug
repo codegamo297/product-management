@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
+include ../../mixins/moment.pug
 
 block main
     if (role.permissions.includes("products_view"))
@@ -34,7 +35,7 @@ block main
                 .row
                     .col-8
                         if (role.permissions.includes("products_edit"))
-                            +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+                            +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`, "pageProduct")
                     .col-4
                         if (role.permissions.includes("products_create"))
                             a.btn.btn-outline-success(
@@ -55,6 +56,8 @@ block main
                             th Giá
                             th Vị trí
                             th Trạng thái
+                            th Người tạo
+                            th Người cập nhật
                             th Hành động
                     tbody
                         each item, index in products
@@ -105,6 +108,17 @@ block main
                                             a.badge.text-bg-danger.text-decoration-none(
                                                 href="javascript:;"
                                             ) Dừng hoạt động
+                                td
+                                    if (item.accountFullName)
+                                        p #{item.accountFullName}
+                                        p 
+                                            +formatDateTime(item.createdBy.createdAt)
+                                td
+                                    - const updatedBy = item.updatedBy.slice(-1)[0]
+                                    if (updatedBy)
+                                        p #{updatedBy.accountFullName}
+                                        p 
+                                            +formatDateTime(updatedBy.updatedAt)
                                 td
                                     a.btn.btn-info.btn-sm(
                                         href=`${prefixAdmin}/products/detail/${item.id}`

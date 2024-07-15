@@ -35,7 +35,7 @@ block main
                 .row
                     .col-8
                         if (role.permissions.includes("products-category_edit"))
-                            +form-change-multi(`${prefixAdmin}/products-category/change-multi?_method=PATCH`)
+                            +form-change-multi(`${prefixAdmin}/products-category/change-multi?_method=PATCH`, "pageProductCategory")
                     .col-4
                         if (role.permissions.includes("products-category_create"))
                             a.btn.btn-outline-success(
