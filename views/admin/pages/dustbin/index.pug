@@ -2,6 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/pagination.pug
 include ../../mixins/alert.pug
 include ../../mixins/form-change-multi.pug
+include ../../mixins/moment.pug
 
 block main
     if (role.permissions.includes("dustbins_view"))
@@ -30,6 +31,7 @@ block main
                             th Tiêu đề
                             th Giá
                             th Vị trí
+                            th Người xóa
                             th Hành động
                     tbody
                         each item, index in products
@@ -48,6 +50,11 @@ block main
                                 td #{item.title}
                                 td #{item.price}$
                                 td #{item.position}
+                                td 
+                                    if (item.accountFullName)
+                                        p #{item.accountFullName} 
+                                        p 
+                                            +formatDateTime(item.deletedBy.deletedAt)
                                 td
                                     if (role.permissions.includes("dustbins_restore"))
                                         button.btn.btn-warning.btn-sm(

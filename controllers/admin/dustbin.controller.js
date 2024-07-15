@@ -1,4 +1,5 @@
 const Product = require("../../models/product.model");
+const Accounts = require("../../models/account.model");
 const paginationHelper = require("../../helpers/pagination");
 
 // [GET] /admin/dustbin
@@ -23,11 +24,22 @@ module.exports.index = async (req, res) => {
 
     // Truy cập db
     const products = await Product.find(find)
+        .sort({ position: "desc" })
         .limit(objPagination.limitItem)
         .skip(objPagination.skip);
 
     if (objPagination.redirectUrl) {
         return res.redirect(objPagination.redirectUrl);
+    }
+
+    for (const product of products) {
+        const user = await Accounts.findOne({
+            _id: product.deletedBy.account_id,
+        });
+
+        if (user) {
+            product.accountFullName = user.fullName;
+        }
     }
 
     res.render("admin/pages/dustbin/index", {
