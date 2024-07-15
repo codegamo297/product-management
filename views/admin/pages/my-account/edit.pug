@@ -1,0 +1,79 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(2000)
+    +alert-error(2000)
+
+    h1 Cập nhật thông tin cá nhân 
+
+    form.needs-validation(
+        action=`${prefixAdmin}/my-account/edit?_method=PATCH`
+        enctype="multipart/form-data"
+        method="POST"
+        novalidate
+    )
+        .mb-3 
+            label.form-label(for="fullName") Họ tên *
+            input.form-control#fullName(
+                type="text"
+                name="fullName"
+                value=user.fullName
+                required
+            )
+            .valid-feedback Looks good!
+            .invalid-feedback Please provide a full name.
+        .mb-3 
+            label.form-label(for="email") Email *
+            input.form-control#email(
+                type="text"
+                name="email"
+                value=user.email
+                required
+            )
+            .valid-feedback Looks good!
+            .invalid-feedback Please provide a email.
+        .mb-3 
+            label.form-label(for="password") Password *
+            input.form-control#password(
+                placeholder="Bạn có thể không cần sửa lại mật khẩu!"
+                type="password"
+                name="password"
+            )
+            .valid-feedback Looks good!
+            .invalid-feedback Please provide a password.
+        .mb-3 
+            label.form-label(for="phone") Số điện thoại
+            input.form-control#phone(
+                type="text"
+                name="phone"
+                value=user.phone
+                required
+            )
+            .valid-feedback Looks good!
+            .invalid-feedback Please provide a phone.
+        .mb-3(upload-image)
+            label.form-label(for="avatar") Avatar
+            input.form-control#avatar(
+                type="file"
+                name="avatar"
+                accept="image/*"
+                upload-image-input
+                required
+            )
+            .wrap-preview
+                img.image-preview(
+                    src=user.avatar
+                    upload-image-preview
+                )
+                span.close-image x
+            .valid-feedback Looks good!
+            .invalid-feedback Please choose a avatar.
+            
+        .mb-3
+            button.btn.btn-primary(
+                type="submit"
+            ) Cập nhật
+            a.btn.btn-secondary.ms-3(
+                href=`${prefixAdmin}/my-account`
+            ) Hủy
