@@ -47,6 +47,17 @@ mixin table-tree(records, level = 0)
                         a.badge.text-bg-danger.text-decoration-none(
                             href="javascript:;"
                         ) Dừng hoạt động
+            td 
+                if (item.accountCreateFullName)
+                    p #{item.accountCreateFullName}
+                    p
+                        +formatDateTime(item.createdBy.createdAt)
+            td  
+                - const updatedBy = item.updatedBy.slice(-1)[0]
+                if (updatedBy)
+                    p #{updatedBy.accountFullName}
+                    p
+                        +formatDateTime(updatedBy.updatedAt)
             td
                 a.btn.btn-info.btn-sm(
                     href=`${prefixAdmin}/products-category/detail/${item.id}`
