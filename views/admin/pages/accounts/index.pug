@@ -3,6 +3,7 @@ include ../../mixins/alert.pug
 include ../../mixins/filterStatus.pug
 include ../../mixins/search.pug
 include ../../mixins/form-change-multi.pug
+include ../../mixins/moment.pug
 
 block main
     if (role.permissions.includes("accounts_view"))
@@ -44,6 +45,8 @@ block main
                             th Phân quyền
                             th Email 
                             th Trạng thái 
+                            th Người tạo
+                            th Người cập nhật
                             th Hành động
                     tbody 
                         each item, index in records
@@ -86,6 +89,17 @@ block main
                                             a.badge.text-bg-danger(
                                                 href="javascript:;"
                                             ) Dừng hoạt động
+                                td
+                                    if (item.accountFullName)
+                                        p #{item.accountFullName}
+                                        p 
+                                            +formatDateTime(item.createdBy.createdAt)
+                                td
+                                    - const updatedBy = item.updatedBy.slice(-1)[0]
+                                    if (updatedBy)
+                                        p #{updatedBy.accountFullName}
+                                        p 
+                                            +formatDateTime(updatedBy.updatedAt)
                                 td  
                                     a.btn.btn-secondary.btn-sm(
                                         href=`${prefixAdmin}/accounts/detail/${item.id}`

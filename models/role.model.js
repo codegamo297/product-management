@@ -8,7 +8,6 @@ const rolesSchema = new Schema({
     description: String,
     permissions: { type: Array, default: [] },
     deleted: { type: Boolean, default: false },
-    deletedAt: Date,
     createdBy: {
         account_id: String,
         createdAt: { type: Date, default: new Date() },
