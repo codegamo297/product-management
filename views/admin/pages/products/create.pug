@@ -31,6 +31,21 @@ block main
                     option(value="") -- Chọn danh mục --
                     if (category)
                         +select-tree(category)
+            .mb-3.form-check.form-check-inline
+                input.form-check-input#featured1(
+                    type="radio"
+                    name="featured"
+                    value="1"
+                )
+                label.form-check-label(for="featured1") Nổi bật
+            .mb-3.form-check.form-check-inline
+                input.form-check-input#featured0(
+                    type="radio"
+                    name="featured"
+                    value="0"
+                    checked
+                )
+                label.form-check-label(for="featured0") Không
             .mb-3 
                 label.form-label(for="desc") Mô tả
                 textarea.form-control.text-area-mce#desc(
