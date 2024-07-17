@@ -1,30 +1,53 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
 
 block main
-    .container.my-3
-        .row
-            .col-12
-                if (product.title)
-                    h1.mb-4 #{product.title}
-                if (product.price)
-                    .mb-4 Giá: <b>#{product.price}$</b>
-                if (product.discountPercentage)
-                    .mb-4 Giảm giá: <b>#{product.discountPercentage}%</b>
-                if (product.stock)
-                    .mb-4 Còn lại: <b>#{product.stock}</b>
-                if (product.thumbnail)
-                    .mb-4
-                        img(
-                            src=product.thumbnail
-                            alt=product.title 
-                            style="width: 100px"
+    .product-detail
+        .container.my-5
+            .row
+                .col-6
+                    if (product.thumbnail)
+                        .inner-thumb
+                            img(
+                                src=product.thumbnail
+                                alt=product.title 
+                            )
+                .col-6
+                    if (product.title)
+                        h1.mb-4 #{product.title}
+                   
+                    if (product.category)
+                        .inner-category 
+                            span Danh mục: 
+                            a(
+                                href=`/products/${product.category.slug}`
+                            ) #{product.category.title}
+                    if (product.priceNew)
+                        .inner-price-new #{product.priceNew}$
+                    if (product.price)
+                        .inner-price-old #{product.price}$
+                    if (product.discountPercentage)
+                        .inner-percent Giảm giá: <span>#{product.discountPercentage}%</span>
+                    if (product.stock)
+                        .inner-stock Còn lại <b>#{product.stock}</b> sản phẩm
+                    
+                    form(
+                        action=`/cart/add/${product.id}`
+                        method="POST"
+                    )
+                        input.form-control.mb-2(
+                            type="number"
+                            name="quantity"
+                            value="1"
+                            min="1"
+                            max=product.stock
                         )
-                if (product.position)
-                    .mb-4 Vị trí: <b>#{product.position}</b>
-                if (product.description)
-                    h4 Mô tả sản phẩm
-                    .mb-4 !{product.description}
-
-                a.btn.btn-warning.mb-4(
-                    href=`/products`
-                ) Trang sản phẩm
+                        button.btn.btn-success(
+                            type="submit"
+                        ) Thêm vào giỏ hàng
+                    
+        .container.my-5
+            .row
+                .col-12 
+                    +box-head("Mô tả sản phẩm")
+                    .inner-desc !{product.description}
