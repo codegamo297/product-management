@@ -26,6 +26,19 @@ module.exports.detail = async (req, res) => {
             deleted: false,
             slug: req.params.slug,
         });
+        let productCategory;
+
+        if (product.product_category_id) {
+            productCategory = await ProductCategory.findOne({
+                _id: product.product_category_id,
+                status: "active",
+                deleted: false,
+            });
+
+            product.category = productCategory;
+        }
+
+        product.priceNew = productHelper.priceNewProduct(product);
 
         res.render("client/pages/products/detail", {
             pageTitle: product.title,
