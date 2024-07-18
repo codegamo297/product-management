@@ -1,6 +1,6 @@
 const regex = {
     notAllowSpecialSymbols: function (string) {
-        return string.replace(/[^a-zA-Z0-9]/g, "");
+        return string.replace(/[^a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF]/g, "");
     },
     email: function (string) {
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

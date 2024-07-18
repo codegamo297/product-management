@@ -9,7 +9,10 @@ module.exports = (objPagination, query, countProducts, page, res, next) => {
         (objPagination.currentPage - 1) * objPagination.limitItem;
     objPagination.totalPage = totalPage;
 
-    if (objPagination.currentPage > objPagination.totalPage) {
+    if (
+        objPagination.currentPage > objPagination.totalPage &&
+        objPagination.totalPage > 0
+    ) {
         objPagination.currentPage = objPagination.totalPage;
         objPagination.redirectUrl = `${systemConfig.prefixAdmin}/${page}?page=${objPagination.currentPage}`;
     }
