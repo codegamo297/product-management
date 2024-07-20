@@ -61,7 +61,9 @@ module.exports.handleLogin = async (req, res) => {
         return;
     }
 
-    res.cookie("token", user.token);
+    res.cookie("token", user.token, {
+        maxAge: 24 * 3600000 * 7,
+    });
     res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
 };
 
