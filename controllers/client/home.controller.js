@@ -12,7 +12,7 @@ module.exports.index = async (req, res) => {
     const newProductsFeatured =
         productHelper.priceNewProducts(productsFeatured);
 
-    // Lấy ra sản phẩm nổi bật
+    // Lấy ra sản phẩm mới nhất
     const productsNew = await Products.find({
         deleted: false,
         status: "active",
