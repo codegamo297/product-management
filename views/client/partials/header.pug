@@ -19,7 +19,7 @@ header.header
                             name="keyword"
                             value=keyword
                         )
-                        button.btn.btn-primary(
+                        button.btn.btn-primary.ms-3(
                             type="submit"
                         ) Tìm
             .col-4
@@ -34,3 +34,5 @@ header.header
                         li
                             a(href="/cart")
                                 |Giỏ hàng <b>(#{miniCart ? miniCart.totalQuantity : 0})</b>
+                        li  
+                            a(href="/user/register") Đăng ký
