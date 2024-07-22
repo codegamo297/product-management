@@ -11,5 +11,8 @@ router.post(
     validate.handleRegister,
     userController.handleRegister
 );
+router.get("/login", userController.login);
+router.post("/login", validate.handleLogin, userController.handleLogin);
+router.get("/logout", userController.logout);
 
 module.exports = router;
