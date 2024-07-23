@@ -14,5 +14,7 @@ router.post(
 router.get("/login", userController.login);
 router.post("/login", validate.handleLogin, userController.handleLogin);
 router.get("/logout", userController.logout);
+router.get("/password/forgot", userController.forgotPassword);
+router.post("/password/forgot", userController.handleForgotPassword);
 
 module.exports = router;
