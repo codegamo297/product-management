@@ -3,6 +3,7 @@ const md5 = require("md5");
 const User = require("../../models/user.model");
 const ForgotPassword = require("../../models/forgot-password.model");
 const generateHelper = require("../../helpers/generate");
+const sendMailHelper = require("../../helpers/sendMail");
 
 // [GET] /user/register
 module.exports.register = async (req, res) => {
@@ -94,6 +95,11 @@ module.exports.logout = async (req, res) => {
 
 // [GET] /user/password/forgot
 module.exports.forgotPassword = async (req, res) => {
+    const user = res.locals.user;
+    if (user) {
+        res.redirect("/");
+    }
+
     res.render("client/pages/user/forgot-password.pug", {
         pageTitle: "Quên mật khẩu",
     });
@@ -102,6 +108,7 @@ module.exports.forgotPassword = async (req, res) => {
 // [POST] /user/password/forgot
 module.exports.handleForgotPassword = async (req, res) => {
     const { email } = req.body;
+
     const user = await User.findOne({ email: email, deleted: false });
 
     if (!user) {
@@ -114,10 +121,80 @@ module.exports.handleForgotPassword = async (req, res) => {
     const objForgotPassword = {
         email: email,
         otp: otp,
-        expireAt: new Date(Date.now() + 1000 * 60 * 2),
+        expireAt: new Date(Date.now() + 1000 * 60 * 3),
     };
     const forgotPassword = new ForgotPassword(objForgotPassword);
-    forgotPassword.save();
+    await forgotPassword.save();
 
-    res.send("ok");
+    // Nếu tồn tại email thì gửi OTP qua email
+    const subject = "Mã OTP xác minh lấy lại mật khẩu";
+    const html = `
+        Mã OTP để lấy lại mật khẩu là <b>${otp}</b>.
+        Thời hạn sử dụng là 3 phút.
+    `;
+    sendMailHelper.sendMail(email, subject, html);
+
+    res.redirect(`/user/password/otp?email=${email}`);
+};
+
+// [GET] /user/password/otp
+module.exports.otpPassword = async (req, res) => {
+    const user = res.locals.user;
+    if (user) {
+        res.redirect("/");
+    }
+
+    const email = req.query.email;
+
+    res.render("client/pages/user/otp-password.pug", {
+        pageTitle: "Nhập mã OTP",
+        email: email,
+    });
+};
+
+// [POST] /user/password/otp
+module.exports.handleOtpPassword = async (req, res) => {
+    const { email, otp } = req.body;
+    const result = await ForgotPassword.findOne({
+        email: email,
+        otp: otp,
+    });
+
+    if (!result) {
+        req.flash("error", "Mã OTP không đúng!");
+        res.redirect("back");
+        return;
+    }
+
+    const user = await User.findOne({
+        email: email,
+    });
+
+    res.cookie("tokenUserForgotPassword", user.tokenUser);
+    res.redirect("/user/password/reset");
+};
+
+// [GET] /user/password/reset
+module.exports.resetPassword = async (req, res) => {
+    const user = res.locals.user;
+    if (user) {
+        res.redirect("/");
+    }
+
+    res.render("client/pages/user/reset-password.pug", {
+        pageTitle: "Đổi mật khẩu",
+    });
+};
+
+// [POST] /user/password/reset
+module.exports.handleResetPassword = async (req, res) => {
+    const { password } = req.body;
+    const tokenUser = req.cookies.tokenUserForgotPassword;
+
+    await User.updateOne({ tokenUser: tokenUser }, { password: md5(password) });
+
+    res.cookie("tokenUser", tokenUser);
+    res.clearCookie("tokenUserForgotPassword");
+    req.flash("success", "Đổi mật khẩu thành công");
+    res.redirect("/");
 };

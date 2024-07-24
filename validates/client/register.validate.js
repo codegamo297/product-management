@@ -74,3 +74,33 @@ module.exports.handleLogin = async (req, res, next) => {
 
     next();
 };
+
+module.exports.handleResetPassword = async (req, res, next) => {
+    const { password, confirmPassword } = req.body;
+
+    if (!password) {
+        req.flash("error", `Vui lòng nhập mật khẩu mới`);
+        res.redirect("back");
+        return;
+    }
+
+    if (password.length < 4) {
+        req.flash("error", `Vui lòng nhập mật khẩu có độ dài lớn hơn 4`);
+        res.redirect("back");
+        return;
+    }
+
+    if (!confirmPassword) {
+        req.flash("error", `Vui lòng xác nhận mật khẩu`);
+        res.redirect("back");
+        return;
+    }
+
+    if (confirmPassword !== password) {
+        req.flash("error", `Xác nhận mật khẩu không chính xác`);
+        res.redirect("back");
+        return;
+    }
+
+    next();
+};
