@@ -2,6 +2,7 @@ const md5 = require("md5");
 
 const User = require("../../models/user.model");
 const ForgotPassword = require("../../models/forgot-password.model");
+const Cart = require("../../models/cart.model");
 const generateHelper = require("../../helpers/generate");
 const sendMailHelper = require("../../helpers/sendMail");
 
@@ -83,12 +84,25 @@ module.exports.handleLogin = async (req, res) => {
         return;
     }
 
+    // Kiểm tra user có nằm trong giỏ hàng nào hay chưa, nếu chưa thì thêm user vào giỏ hàng
+    // Nếu rồi thì chuyển cookies của cart đó về của user
+    const cart = await Cart.findOne({
+        user_id: user.id,
+    });
+
+    if (cart?.user_id === user.id) {
+        res.cookie("cartId", cart.id);
+    } else {
+        await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: user.id });
+    }
+
     res.cookie("tokenUser", user.tokenUser, { maxAge: 24 * 3600000 * 7 });
     res.redirect("/");
 };
 
 // [GET] /user/logout
 module.exports.logout = async (req, res) => {
+    res.clearCookie("cartId");
     res.clearCookie("tokenUser");
     res.redirect("/user/login");
 };
