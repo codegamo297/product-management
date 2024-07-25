@@ -36,6 +36,8 @@ header.header
                                 |Giỏ hàng <b>(#{miniCart ? miniCart.totalQuantity : 0})</b>
                         if (user)
                             li 
+                                a(href="/user/info") Tài khoản
+                            li 
                                 a(href="/user/logout") Đăng xuất
                         else 
                             li  
