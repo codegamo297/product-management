@@ -57,6 +57,11 @@ app.use(cookieParser());
 // Routes init
 routeAdmin(app);
 routeClient(app);
+app.get("*", (req, res) => {
+    res.render("client/pages/error/404", {
+        pageTitle: "404 Not Found",
+    });
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
