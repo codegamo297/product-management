@@ -21,3 +21,6 @@
             if (role.permissions.includes("dustbins_view"))
                 li
                     a(href=`${prefixAdmin}/dustbin`) Thùng rác
+            if (role.permissions.includes("settings-general_view"))
+                li
+                    a(href=`${prefixAdmin}/settings/general`) Cài đặt chung

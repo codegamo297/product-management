@@ -155,6 +155,16 @@ block main
                         each item in records
                             td.text-center
                                 input(type="checkbox")
+
+                    //- Cài đặt chung
+                    tr 
+                        td(colspan=records.length + 1)
+                            b Cài đặt chung
+                    tr(data-name="settings-general_view")
+                        td Xem 
+                        each item in records
+                            td.text-center
+                                input(type="checkbox")
         
         else
             p Chưa có nhóm quyền nào

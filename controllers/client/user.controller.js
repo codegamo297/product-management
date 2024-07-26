@@ -90,7 +90,7 @@ module.exports.handleLogin = async (req, res) => {
         user_id: user.id,
     });
 
-    if (cart?.user_id === user.id) {
+    if (cart) {
         res.cookie("cartId", cart.id);
     } else {
         await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: user.id });
