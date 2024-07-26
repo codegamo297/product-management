@@ -1,0 +1,70 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    if (role.permissions.includes("settings-general_view"))
+        h1 Cài đặt chung
+
+        +alert-success(2000)
+        +alert-error(2000)
+
+        form(
+            action=`${prefixAdmin}/settings/general?_method=PATCH`
+            method="POST"
+            enctype="multipart/form-data"
+        )
+            .mb-3 
+                label.form-label(for="websiteName") Tên websiteName
+                input.form-control#websiteName(
+                    type="text"
+                    name="websiteName"
+                    value=(settingGeneral.websiteName ? settingGeneral.websiteName : "")
+                )
+            .mb-3(upload-image)
+                label.form-label(for="logo") Logo
+                input.form-control#logo(
+                    type="file"
+                    name="logo"
+                    upload-image-input
+                )
+                .wrap-preview
+                    img.image-preview(
+                        src=(settingGeneral.logo ? settingGeneral.logo : "")
+                        upload-image-preview
+                    )
+                    span.close-image x
+            .mb-3 
+                label.form-label(for="phone") Số điện thoại
+                input.form-control#phone(
+                    type="text"
+                    name="phone"
+                    value=(settingGeneral.phone ? settingGeneral.phone : "")
+                )
+            .mb-3 
+                label.form-label(for="email") Email
+                input.form-control#email(
+                    type="email"
+                    name="email"
+                    value=(settingGeneral.email ? settingGeneral.email : "")
+                )
+            .mb-3 
+                label.form-label(for="address") Địa chỉ
+                input.form-control#address(
+                    type="text"
+                    name="address"
+                    value=(settingGeneral.address ? settingGeneral.address : "")
+                )
+            .mb-3 
+                label.form-label(for="copyright") Copyright
+                input.form-control#copyright(
+                    type="text"
+                    name="copyright"
+                    value=(settingGeneral.copyright ? settingGeneral.copyright : "")
+                )
+            .mb-3 
+                button.btn.btn-primary(type="submit") Cập nhật
+
+        script(src="/admin/js/products.js")
+
+    else 
+        h1 Bạn không có quyền truy cập
