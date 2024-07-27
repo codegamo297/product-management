@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "start": "nodemon --inspect index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "sass-admin": "sass scss/admin:public/admin/css -w",
+        "sass-client": "sass scss/client:public/css -w"
     },
     "author": "Do Tat Hieu",
     "license": "ISC",
@@ -26,6 +28,7 @@
         "nodemailer": "^6.9.14",
         "path": "^0.12.7",
         "pug": "^3.0.3",
+        "sass": "^1.77.8",
         "streamifier": "^0.1.1",
         "tinymce": "^7.2.1"
     },
