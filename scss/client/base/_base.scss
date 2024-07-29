@@ -15,9 +15,10 @@ html {
 }
 
 body {
+    color: var(--text-color, #191720);
     font-size: 1.6rem;
     font-weight: 400;
-    font-family: "DM Sans", sans-serif;
+    font-family: "Manrope", sans-serif;
 }
 
 a {
@@ -60,4 +61,15 @@ button {
     background: transparent;
     padding: 0;
     cursor: pointer;
+}
+
+.icon {
+    filter: var(--icon-color);
+}
+
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }

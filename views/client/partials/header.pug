@@ -1,46 +1,191 @@
 include ../mixins/sub-menu.pug
 
-header.header
-    .container 
-        .row.align-items-center 
-            .col-3 
-                .inner-logo 
-                    a(href="/")
-                        img(src=settingGeneral.logo, alt=settingGeneral.websiteName)
-            .col-5 
-                form(
-                    action="/search"
-                    meth="GET"
-                )
-                    .mb-0.d-flex
-                        input.form-control(
-                            type="text"
-                            placeholder="Nhập từ khóa..."
-                            name="keyword"
-                            value=keyword
-                        )
-                        button.btn.btn-primary.ms-3(
-                            type="submit"
-                        ) Tìm
-            .col-4
-                .inner-menu
-                    ul 
-                        li
-                            a(href="/") Trang chủ
-                        li.sub-menu
+header.header#header
+    .container
+        .top-bar
+            //- Logo
+            a.top-bar__logo(href="/")
+                p.header__logo
+                    | F
+                    img(
+                        src="/images/logo-1.svg"
+                        alt="Logo"
+                    )
+                    img(
+                        src="/images/logo-2.svg"
+                        alt="Logo"
+                    )
+                    | DEATS
+        
+            //- Navbar
+            div
+                nav.navbar 
+                    ul.navbar__list
+                        li.navbar__item
+                            a.navbar__link(
+                                href="/"
+                            ) Home
+                        li.navbar__item
+                            a.navbar__link(
+                                href="/about"
+                            ) About
+                        li.navbar__item.sub-menu
                             - const pathProduct = "/products";
-                            a(href=`${pathProduct}`) Sản phẩm
+                            a.navbar__link.navbar__link--dropdown(
+                                href=`${pathProduct}`
+                            )
+                                | Product
+                                img.icon.navbar__arrow(
+                                    src="/icons/arrow-down.svg"
+                                    alt
+                                )
+                            .sub-menu__bridge
                             +sub-menu(layoutProductsCategory, pathProduct) 
-                        li
-                            a(href="/cart")
-                                |Giỏ hàng <b>(#{miniCart ? miniCart.totalQuantity : 0})</b>
-                        if (user)
-                            li 
-                                a(href="/user/info") Tài khoản
-                            li 
-                                a(href="/user/logout") Đăng xuất
-                        else 
-                            li  
-                                a(href="/user/login") Đăng Nhập
-                            li  
-                                a(href="/user/register") Đăng ký
+                        li.navbar__item.sub-menu
+                            button.navbar__link.navbar__link--dropdown()
+                                | Other
+                                img.icon.navbar__arrow(
+                                    src="/icons/arrow-down.svg"
+                                    alt
+                                )
+                                
+                            .sub-menu__bridge
+                            ul.sub-menu__list
+                                li.sub-menu__item
+                                    a.sub-menu__link(
+                                        href="/blog"
+                                    ) Blog
+                                li.sub-menu__item
+                                    a.sub-menu__link(
+                                        href="/fag"
+                                    ) FAQ
+                                li.sub-menu__item
+                                    a.sub-menu__link(
+                                        href="/contact"
+                                    ) Contact
+                                li.sub-menu__item
+                                    a.sub-menu__link(
+                                        href="/coming-soon"
+                                    ) Coming Soon
+
+            //- Action
+            .top-act
+                if (user)
+                    .top-act__group.top-act__search
+                        form.top-act__form(
+                            action="/search"
+                            method="GET"
+                        )
+                            input.top-act__input(
+                                type="text"
+                                placeholder="Nhập từ khóa..."
+                                name="keyword"
+                                value=keyword
+                            )
+                            span.top-act__separate
+                            button.top-act__btn(
+                                type="submit"
+                            )
+                                img.icon(
+                                    src="/icons/search.svg"
+                                    alt="search"
+                                )
+                    .top-act__group
+                        .top-act__btn-wrap
+                            button.top-act__btn
+                                img.icon(
+                                    src="/icons/buy.svg"
+                                    alt="cart"
+                                )
+                                span.top-act__totalQuantity
+                                    | (#{miniCart ? miniCart.totalQuantity : 0})
+                            .act-dropdown
+                                .act-dropdown__inner 
+                                    img.act-dropdown__arrow(
+                                        src="/images/arrow-up.png"
+                                    )
+                                    .act-dropdown__top
+                                        h2.act-dropdown__title 
+                                            | Bạn có #{miniCart.totalQuantity} sản phẩm
+                                        a.act-dropdown__view-all(
+                                            href="/cart"
+                                        ) Xem tất cả
+                                    .row.row-cols-3.gx-2.act-dropdown__list
+                                        each item in cart.products
+                                            .col
+                                                article.cart-preview-item
+                                                    .cart-preview-item__img-wrap 
+                                                        img.cart-preview-item__thumb(
+                                                            src=item.productInfo.thumbnail
+                                                            alt=item.productInfo.title
+                                                        )
+                                                    h3.cart-preview-item__title.line-clamp 
+                                                        | #{item.productInfo.title}
+                                                    p.cart-preview-item__price 
+                                                        | #{item.productInfo.priceNew}$ 
+                                                        | x #{item.quantity}
+                                    .act-dropdown__bottom
+                                        .act-dropdown__row
+                                            span.act-dropdown__label Tổng tiền hàng
+                                            span.act-dropdown__value #{cart.totalPrice}
+                                        .act-dropdown__row
+                                            span.act-dropdown__label Phí vận chuyển
+                                            span.act-dropdown__value 10
+                                        .act-dropdown__row
+                                            span.act-dropdown__label.act-dropdown__bold 
+                                                | Thành tiền
+                                            span.act-dropdown__value.act-dropdown__bold 
+                                                | #{cart.totalPrice}
+                                    .act-dropdown__checkout
+                                        a(
+                                            href="/checkout"
+                                            class="btn btn--primary btn--rounded act-dropdown__checkout-btn"
+                                        ) Thanh toán
+                    .top-act__user
+                        img.top-act__avatar(
+                            src=user.avatar
+                            alt=user.fullName
+                        )
+                        .act-dropdown.top-act__dropdown
+                            .act-dropdown__inner.user-menu 
+                                img.act-dropdown__arrow.top-act__dropdown-arrow(
+                                    src="/images/arrow-up.png"
+                                )
+                                .user-menu__top 
+                                    img.user-menu__avatar(
+                                        src=user.avatar 
+                                        alt=user.fullName
+                                    )
+                                    div
+                                        p.user-menu__fullName #{user.fullName}
+                                        p.user-menu__email #{user.email}
+                                ul.user-menu__list
+                                    li 
+                                        a.user-menu__link(
+                                            href="/user/info"
+                                        ) Thông tin cá nhân
+                                    li
+                                        button.user-menu__link
+                                            span Dark Mode
+                                            img.icon(
+                                                src="/icons/sun.svg"
+                                                alt="dark mode"
+                                            )
+                                    li 
+                                        a.user-menu__link(
+                                            href="#!"
+                                        ) Cài đặt
+                                    li
+                                        a.user-menu__link(
+                                            href="/user/logout"
+                                        ) Đăng xuất
+
+
+                    //- div #{user}
+                else
+                    a.btn(
+                        href="/user/register"
+                    ) Đăng ký
+                    a.btn.btn--primary(
+                        href="/user/login"
+                    ) Đăng nhập    
