@@ -1,7 +1,9 @@
 mixin sub-menu(items, path)
-    ul
+    ul.sub-menu__list
         each item in items
-            li
-                a(href=`${path}/${item.slug}`) #{item.title}
+            li.sub-menu__item
+                a.sub-menu__link(
+                    href=`${path}/${item.slug}`
+                ) #{item.title}
                 if (item.children && item.children.length > 0)
                     +sub-menu(item.children, path)

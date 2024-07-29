@@ -1,0 +1,36 @@
+@use "../abstracts";
+
+:root {
+    --text-color: #191720;
+    --icon-color: brightness(0) saturate(100%) invert(7%) sepia(52%)
+        saturate(867%) hue-rotate(212deg) brightness(99%) contrast(96%);
+    --purple-primary: #572af8;
+    --white: #fff;
+    --grey: #575363;
+
+    --top-act-group-bg-color: #fff;
+    --top-act-group-shadow: rgba(237, 237, 246, 0.2);
+    --top-act-separate-color: #ededf6;
+
+    --bg-color: #fffae3;
+
+    // Header
+    --header-act-dropdown-bg: #fff;
+    --header-act-dropdown-shadow: rgba(200, 200, 200, 0.4);
+    --header-act-dropdown-border-color: #d2d1d6;
+
+    // Dropdown
+    --dropdown-bg-color: #fff;
+    --dropdown-shadow-color: rgba(200, 200, 200, 0.4);
+    --top-menu-border-color: #d2d1d6;
+
+    // Buttons
+    --button-outline-border: #d2d1d6;
+
+    // Sub menu
+    --sub-menu-shadow-color: rgba(0, 103, 255, 0.07);
+    --sub-menu-item-bg: #f6f5f2;
+
+    // User menu
+    --user-menu-link-hover: #ebebeb;
+}
